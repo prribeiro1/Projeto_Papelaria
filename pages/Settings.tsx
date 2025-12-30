@@ -14,6 +14,7 @@ const Settings: React.FC = () => {
         pix_key: '',
         quote_message_template: ''
     });
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (settings) {
@@ -28,6 +29,37 @@ const Settings: React.FC = () => {
             });
         }
     }, [settings]);
+
+    const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            setUploading(false);
+            return;
+        }
+
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+            .from('logos')
+            .upload(filePath, file);
+
+        if (uploadError) {
+            alert('Erro ao fazer upload: ' + uploadError.message);
+        } else {
+            const { data: { publicUrl } } = supabase.storage
+                .from('logos')
+                .getPublicUrl(filePath);
+
+            setFormData(prev => ({ ...prev, logo_url: publicUrl }));
+        }
+        setUploading(false);
+    };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -107,16 +139,28 @@ const Settings: React.FC = () => {
                                 </div>
 
                                 <div className="md:col-span-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">URL da Logomarca (PNG/JPG)</label>
-                                    <div className="flex gap-4">
-                                        <input placeholder="https://..." className="flex-1 h-14 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none" value={formData.logo_url} onChange={e => setFormData({ ...formData, logo_url: e.target.value })} />
-                                        {formData.logo_url && (
-                                            <div className="size-14 rounded-2xl bg-white border border-slate-200 p-2 flex items-center justify-center overflow-hidden">
-                                                <img src={formData.logo_url} alt="Preview" className="max-h-full max-w-full object-contain" />
-                                            </div>
-                                        )}
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Logomarca da Empresa</label>
+                                    <div className="flex items-center gap-6">
+                                        <div className="relative size-32 rounded-[32px] bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden group">
+                                            {formData.logo_url ? (
+                                                <img src={formData.logo_url} alt="Logo" className="w-full h-full object-contain p-4" />
+                                            ) : (
+                                                <span className="material-symbols-outlined text-4xl text-slate-300">image</span>
+                                            )}
+                                            {uploading && (
+                                                <div className="absolute inset-0 bg-white/80 dark:bg-slate-900/80 flex items-center justify-center">
+                                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <label className="cursor-pointer bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all text-center">
+                                                {uploading ? 'ENVIANDO...' : 'FAZER UPLOAD'}
+                                                <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
+                                            </label>
+                                            <p className="text-[10px] text-slate-400 font-medium max-w-[200px]">Recomendado: PNG com fundo transparente. Aparecerá em todos os seus documentos.</p>
+                                        </div>
                                     </div>
-                                    <p className="text-[10px] text-slate-400 mt-2 ml-1">Aparecerá nos recibos em PDF e orçamentos.</p>
                                 </div>
 
                                 <div className="md:col-span-2">
