@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useClients } from '../hooks/useData';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
 const Clients: React.FC = () => {
@@ -8,6 +9,15 @@ const Clients: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', address: '' });
   const [addingClient, setAddingClient] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('new') === 'true') {
+      setIsModalOpen(true);
+    }
+  }, [location]);
 
   const filteredClients = clients.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

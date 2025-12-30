@@ -46,9 +46,16 @@ export function useOrders() {
                 value: Number(o.value),
                 costValue: Number(o.cost_value || 0),
                 status: o.status,
-                createdAt: new Date(o.created_at).toLocaleDateString(),
-                deadline: o.deadline ? new Date(o.deadline).toLocaleDateString() : 'Sem prazo',
-                items: o.items || []
+                createdAt: new Date(o.created_at).toLocaleDateString('pt-BR'),
+                deadline: o.deadline ? new Date(o.deadline).toLocaleDateString('pt-BR') : 'Sem prazo',
+                items: o.items || [],
+                amountPaid: Number(o.amount_paid || 0),
+                discount: Number(o.discount || 0),
+                paymentMethod: o.payment_method || 'Dinheiro',
+                productionStatus: o.production_status || 'Aguardando',
+                eventDate: o.event_date || '',
+                theme: o.theme || '',
+                notes: o.notes || ''
             }));
             setOrders(mappedOrders);
         }
@@ -146,7 +153,18 @@ export function useTransactions() {
             .order('date', { ascending: false });
 
         if (error) console.error('Error fetching transactions:', error);
-        else setTransactions(data || []);
+        else {
+            const mapped = (data || []).map((t: any) => ({
+                id: t.id,
+                description: t.description,
+                value: Number(t.value),
+                date: t.date,
+                category: t.category,
+                type: t.type,
+                paymentMethod: t.payment_method || 'Dinheiro'
+            }));
+            setTransactions(mapped);
+        }
         setLoading(false);
     }
 
@@ -164,15 +182,20 @@ export function useDashboardStats() {
         ordersInProduction: 0,
         newClients: 0,
         pendingPayments: 0,
-        totalProfit: 0
+        totalProfit: 0,
+        paymentBreakdown: {
+            pix: 0,
+            card: 0,
+            cash: 0
+        }
     });
     const [loading, setLoading] = useState(true);
 
     async function fetchStats() {
         setLoading(true);
 
-        const { data: ords } = await supabase.from('orders').select('value, cost_value, amount_paid, status');
-        const { data: trans } = await supabase.from('transactions').select('value, type');
+        const { data: ords } = await supabase.from('orders').select('value, cost_value, amount_paid, status, payment_method');
+        const { data: trans } = await supabase.from('transactions').select('value, type, payment_method');
         const { data: cls } = await supabase.from('clients').select('id');
 
         const revenue = (ords || []).reduce((acc, o) => acc + Number(o.value), 0);
@@ -181,13 +204,22 @@ export function useDashboardStats() {
         const inProduction = (ords || []).filter(o => o.status !== 'Entregue' && o.status !== 'Cancelado').length;
         const pending = (ords || []).filter(o => Number(o.amount_paid) < Number(o.value)).length;
 
+        const pixTotal = (ords || []).filter(o => o.payment_method === 'Pix').reduce((acc, o) => acc + Number(o.value), 0);
+        const cardTotal = (ords || []).filter(o => o.payment_method?.includes('Cartão')).reduce((acc, o) => acc + Number(o.value), 0);
+        const cashTotal = (ords || []).filter(o => o.payment_method === 'Dinheiro').reduce((acc, o) => acc + Number(o.value), 0);
+
         setStats({
             totalRevenue: revenue,
             monthlyExpenses: expenses,
             ordersInProduction: inProduction,
             newClients: (cls || []).length,
             pendingPayments: pending,
-            totalProfit: profit
+            totalProfit: profit,
+            paymentBreakdown: {
+                pix: pixTotal,
+                card: cardTotal,
+                cash: cashTotal
+            }
         });
         setLoading(false);
     }

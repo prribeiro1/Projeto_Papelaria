@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useQuotes, useClients, useCompanySettings } from '../hooks/useData';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Quote } from '../types';
 import { QRCodeSVG } from 'qrcode.react';
@@ -18,6 +19,15 @@ const Quotes: React.FC = () => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [customMessage, setCustomMessage] = useState('');
     const [converting, setConverting] = useState<string | null>(null);
+
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get('new') === 'true') {
+            setIsModalOpen(true);
+        }
+    }, [location]);
 
     const [newQuote, setNewQuote] = useState({
         clientSelector: '',

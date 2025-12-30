@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useOrders, useClients, useCompanySettings } from '../hooks/useData';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { OrderStatus, Client } from '../types';
 import jsPDF from 'jspdf';
@@ -25,8 +26,18 @@ const Orders: React.FC = () => {
     event_date: '',
     theme: '',
     notes: '',
-    cost_value: 0
+    cost_value: 0,
+    payment_method: 'Dinheiro'
   });
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('new') === 'true') {
+      setIsModalOpen(true);
+    }
+  }, [location]);
 
   // Dynamic Items state
   const [items, setItems] = useState([{ description: '', quantity: 1, unitValue: 0 }]);
@@ -149,6 +160,7 @@ const Orders: React.FC = () => {
       discount: newOrder.discount,
       amount_paid: newOrder.amount_paid,
       production_status: newOrder.production_status,
+      payment_method: newOrder.payment_method,
       items: items
     }]);
 
@@ -166,7 +178,8 @@ const Orders: React.FC = () => {
     setNewOrder({
       clientSelector: '', product_name: '', discount: 0, amount_paid: 0,
       status: OrderStatus.PENDING, production_status: 'Aguardando',
-      deadline: '', event_date: '', theme: '', notes: '', cost_value: 0
+      deadline: '', event_date: '', theme: '', notes: '', cost_value: 0,
+      payment_method: 'Dinheiro'
     });
     setItems([{ description: '', quantity: 1, unitValue: 0 }]);
   };
@@ -336,12 +349,25 @@ const Orders: React.FC = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="text-xs font-black text-slate-500 mb-1.5 ml-1 block">Data da Festa</label>
-                          <input type="date" className="w-full h-12 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newOrder.event_date} onChange={e => setNewOrder({ ...newOrder, event_date: e.target.value })} />
+                          <input type="date" className="w-full h-12 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none" value={newOrder.event_date} onChange={e => setNewOrder({ ...newOrder, event_date: e.target.value })} />
                         </div>
                         <div>
                           <label className="text-xs font-black text-slate-500 mb-1.5 ml-1 block">Data de Entrega *</label>
-                          <input type="date" required className="w-full h-12 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newOrder.deadline} onChange={e => setNewOrder({ ...newOrder, deadline: e.target.value })} />
+                          <input type="date" required className="w-full h-12 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none" value={newOrder.deadline} onChange={e => setNewOrder({ ...newOrder, deadline: e.target.value })} />
                         </div>
+                      </div>
+                      <div>
+                        <label className="text-xs font-black text-slate-500 mb-1.5 ml-1 block">Forma de Pagamento</label>
+                        <select
+                          className="w-full h-12 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold appearance-none outline-none"
+                          value={newOrder.payment_method}
+                          onChange={e => setNewOrder({ ...newOrder, payment_method: e.target.value })}
+                        >
+                          <option value="Dinheiro">Dinheiro</option>
+                          <option value="Pix">Pix</option>
+                          <option value="Cartão de Crédito">Cartão de Crédito</option>
+                          <option value="Cartão de Débito">Cartão de Débito</option>
+                        </select>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>

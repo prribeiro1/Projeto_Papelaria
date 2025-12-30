@@ -18,6 +18,13 @@ export interface Order {
   createdAt: string;
   deadline: string;
   items?: any[];
+  amountPaid: number;
+  discount: number;
+  paymentMethod: string;
+  productionStatus: string;
+  eventDate?: string;
+  theme?: string;
+  notes?: string;
 }
 
 export interface Quote {
@@ -73,6 +80,7 @@ export interface Transaction {
   date: string;
   category: string;
   type: 'Entrada' | 'Saída';
+  paymentMethod: string;
 }
 
 export interface CompanySettings {

@@ -1,9 +1,41 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import { useTransactions, useDashboardStats } from '../hooks/useData';
+import { supabase } from '../supabaseClient';
 
 const Financeiro: React.FC = () => {
-    const { transactions, loading: loadingTrans } = useTransactions();
-    const { stats, loading: loadingStats } = useDashboardStats();
+    const { transactions, loading: loadingTrans, refresh } = useTransactions();
+    const { stats, loading: loadingStats, refresh: refreshStats } = useDashboardStats();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [newTransaction, setNewTransaction] = useState({
+        description: '',
+        value: 0,
+        type: 'Entrada' as 'Entrada' | 'Saída',
+        category: 'Vendas',
+        payment_method: 'Pix',
+        date: new Date().toISOString().split('T')[0]
+    });
+
+    const handleCreateTransaction = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSaving(true);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { error } = await supabase.from('transactions').insert([{
+            ...newTransaction,
+            user_id: user.id
+        }]);
+
+        if (error) alert('Erro ao salvar transação: ' + error.message);
+        else {
+            setIsModalOpen(false);
+            setNewTransaction({ ...newTransaction, description: '', value: 0 });
+            refresh();
+            refreshStats();
+        }
+        setSaving(false);
+    };
 
     const paymentMethods = [
         { label: 'Pix', value: 0, icon: 'account_balance', color: 'bg-emerald-500' },
@@ -12,9 +44,9 @@ const Financeiro: React.FC = () => {
     ];
 
     const faturamentoTotal = stats.totalRevenue || 0;
-    paymentMethods[0].value = faturamentoTotal * 0.6;
-    paymentMethods[1].value = faturamentoTotal * 0.3;
-    paymentMethods[2].value = faturamentoTotal * 0.1;
+    paymentMethods[0].value = stats.paymentBreakdown?.pix || 0;
+    paymentMethods[1].value = stats.paymentBreakdown?.card || 0;
+    paymentMethods[2].value = stats.paymentBreakdown?.cash || 0;
 
     return (
         <div className="flex flex-col h-full bg-slate-50 dark:bg-[#0f172a] overflow-hidden">
@@ -27,10 +59,22 @@ const Financeiro: React.FC = () => {
                     <p className="text-sm text-slate-500 font-medium">Controle de caixa, entradas e saídas</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-black uppercase tracking-widest border border-emerald-100 hover:bg-emerald-100 transition-all flex items-center gap-2">
+                    <button
+                        onClick={() => {
+                            setNewTransaction({ ...newTransaction, type: 'Entrada', category: 'Vendas' });
+                            setIsModalOpen(true);
+                        }}
+                        className="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-black uppercase tracking-widest border border-emerald-100 hover:bg-emerald-100 transition-all flex items-center gap-2"
+                    >
                         <span className="material-symbols-outlined text-sm">add</span> Nova Entrada
                     </button>
-                    <button className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-black uppercase tracking-widest border border-rose-100 hover:bg-rose-100 transition-all flex items-center gap-2">
+                    <button
+                        onClick={() => {
+                            setNewTransaction({ ...newTransaction, type: 'Saída', category: 'Insumos' });
+                            setIsModalOpen(true);
+                        }}
+                        className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-black uppercase tracking-widest border border-rose-100 hover:bg-rose-100 transition-all flex items-center gap-2"
+                    >
                         <span className="material-symbols-outlined text-sm">remove</span> Nova Saída
                     </button>
                 </div>
@@ -119,6 +163,7 @@ const Financeiro: React.FC = () => {
                                         <th className="px-8 py-4">Data</th>
                                         <th className="px-8 py-4">Descrição</th>
                                         <th className="px-8 py-4">Categoria</th>
+                                        <th className="px-8 py-4">Pagto</th>
                                         <th className="px-8 py-4 text-right">Valor</th>
                                     </tr>
                                 </thead>
@@ -137,6 +182,9 @@ const Financeiro: React.FC = () => {
                                             <td className="px-8 py-5">
                                                 <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg text-[10px] font-black uppercase tracking-widest">{t.category}</span>
                                             </td>
+                                            <td className="px-8 py-5">
+                                                <span className="text-xs font-bold text-slate-500">{t.paymentMethod}</span>
+                                            </td>
                                             <td className={`px-8 py-5 text-right font-black text-sm ${t.type === 'Entrada' ? 'text-emerald-600' : 'text-rose-600'}`}>
                                                 {t.type === 'Entrada' ? '+' : '-'} R$ {t.value.toFixed(2)}
                                             </td>
@@ -148,6 +196,91 @@ const Financeiro: React.FC = () => {
                     )}
                 </div>
             </main>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
+                    <div className="bg-white dark:bg-[#16212e] rounded-[40px] w-full max-w-lg shadow-2xl border border-white/20 overflow-hidden">
+                        <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
+                            <h3 className="text-xl font-black text-slate-900 dark:text-white">Nova {newTransaction.type}</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-rose-500 transition-colors">
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <form onSubmit={handleCreateTransaction} className="p-8 space-y-6">
+                            <div>
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Descrição</label>
+                                <input
+                                    required
+                                    className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none"
+                                    placeholder="Ex: Venda de convites, Compra de papel..."
+                                    value={newTransaction.description}
+                                    onChange={e => setNewTransaction({ ...newTransaction, description: e.target.value })}
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Valor</label>
+                                    <input
+                                        required
+                                        type="number"
+                                        step="0.01"
+                                        className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-black outline-none font-mono"
+                                        value={newTransaction.value}
+                                        onChange={e => setNewTransaction({ ...newTransaction, value: Number(e.target.value) })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Data</label>
+                                    <input
+                                        required
+                                        type="date"
+                                        className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none"
+                                        value={newTransaction.date}
+                                        onChange={e => setNewTransaction({ ...newTransaction, date: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Forma de Pagto</label>
+                                    <select
+                                        className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none appearance-none"
+                                        value={newTransaction.payment_method}
+                                        onChange={e => setNewTransaction({ ...newTransaction, payment_method: e.target.value })}
+                                    >
+                                        <option value="Pix">Pix</option>
+                                        <option value="Dinheiro">Dinheiro</option>
+                                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                        <option value="Cartão de Débito">Cartão de Débito</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Categoria</label>
+                                    <select
+                                        className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none appearance-none"
+                                        value={newTransaction.category}
+                                        onChange={e => setNewTransaction({ ...newTransaction, category: e.target.value })}
+                                    >
+                                        <option value="Vendas">Vendas</option>
+                                        <option value="Serviços">Serviços</option>
+                                        <option value="Insumos">Insumos</option>
+                                        <option value="Marketing">Marketing</option>
+                                        <option value="Infraestrutura">Infraestrutura</option>
+                                        <option value="Outros">Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={saving}
+                                className="w-full h-14 rounded-2xl bg-primary text-white font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:translate-y-[-2px] transition-all disabled:opacity-50"
+                            >
+                                {saving ? 'Salvando...' : 'Confirmar Lançamento'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

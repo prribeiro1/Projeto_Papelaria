@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useOrders, useDashboardStats } from '../hooks/useData';
 import { supabase } from '../supabaseClient';
 import { OrderStatus } from '../types';
@@ -121,22 +122,22 @@ const Dashboard: React.FC = () => {
             <div className="flex flex-col gap-6">
               <h3 className="text-xl font-black text-slate-800 dark:text-white">Atalhos Rápidos</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-primary p-6 rounded-[32px] text-white shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                <Link to="/pedidos?new=true" className="bg-primary p-6 rounded-[32px] text-white shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
                   <span className="material-symbols-outlined text-3xl">add_circle</span>
                   <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Pedido</span>
-                </div>
-                <div className="bg-emerald-500 p-6 rounded-[32px] text-white shadow-xl shadow-emerald-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                </Link>
+                <Link to="/clientes?new=true" className="bg-emerald-500 p-6 rounded-[32px] text-white shadow-xl shadow-emerald-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
                   <span className="material-symbols-outlined text-3xl">person_add</span>
                   <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Cliente</span>
-                </div>
-                <div className="bg-amber-500 p-6 rounded-[32px] text-white shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                </Link>
+                <Link to="/orcamentos?new=true" className="bg-amber-500 p-6 rounded-[32px] text-white shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
                   <span className="material-symbols-outlined text-3xl">receipt_long</span>
                   <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Orçamento</span>
-                </div>
-                <div className="bg-slate-800 p-6 rounded-[32px] text-white shadow-xl shadow-slate-800/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                </Link>
+                <Link to="/financeiro" className="bg-slate-800 p-6 rounded-[32px] text-white shadow-xl shadow-slate-800/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
                   <span className="material-symbols-outlined text-3xl">print</span>
                   <span className="text-xs font-black uppercase tracking-wider leading-none">Imprimir<br />Relatórios</span>
-                </div>
+                </Link>
               </div>
             </div>
 
@@ -144,7 +145,7 @@ const Dashboard: React.FC = () => {
               <div className="absolute top-0 right-0 size-40 bg-primary/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform"></div>
               <h4 className="text-lg font-black mb-2 relative z-10">Dica do PapelariaSys</h4>
               <p className="text-sm text-slate-400 font-medium relative z-10 leading-relaxed mb-6">Mantenha seus prazos atualizados na aba de Produção para receber alertas automáticos.</p>
-              <button className="bg-white/10 hover:bg-white/20 transition-all text-white text-[10px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl relative z-10">Acessar Produção</button>
+              <Link to="/producao" className="bg-white/10 hover:bg-white/20 transition-all text-white text-[10px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl relative z-10 inline-block text-center">Acessar Produção</Link>
             </div>
           </div>
         </div>

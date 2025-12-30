@@ -1,11 +1,27 @@
 import React, { useState, useMemo } from 'react';
 import { useOrders } from '../hooks/useData';
+import { supabase } from '../supabaseClient';
 import { OrderStatus, Order } from '../types';
 
 const Production: React.FC = () => {
-  const { orders, loading } = useOrders();
+  const { orders, refresh, loading } = useOrders();
   const [view, setView] = useState<'calendar' | 'kanban'>('calendar');
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+  const handleStatusUpdate = async (orderId: string, newStatus: OrderStatus) => {
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: newStatus })
+      .eq('id', orderId);
+
+    if (error) {
+      alert('Erro ao atualizar status: ' + error.message);
+    } else {
+      refresh();
+      setActiveMenu(null);
+    }
+  };
 
   const stages = [
     OrderStatus.PENDING,
@@ -174,7 +190,38 @@ const Production: React.FC = () => {
                         <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 text-[9px] font-black tracking-widest uppercase">
                           #{order.id.slice(0, 6)}
                         </span>
-                        <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors text-xl">more_vert</span>
+                        <div className="relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveMenu(activeMenu === order.id ? null : order.id);
+                            }}
+                            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-slate-400 hover:text-primary transition-colors text-xl">more_vert</span>
+                          </button>
+
+                          {activeMenu === order.id && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 z-50 overflow-hidden animate-in fade-in zoom-in duration-200">
+                              <div className="p-2 flex flex-col gap-1">
+                                {Object.values(OrderStatus).map((status) => (
+                                  <button
+                                    key={status}
+                                    onClick={() => handleStatusUpdate(order.id, status)}
+                                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${order.status === status
+                                      ? 'bg-primary text-white'
+                                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                                  >
+                                    <div className={`size-2 rounded-full ${status === OrderStatus.READY ? 'bg-emerald-500' :
+                                      status === OrderStatus.DELIVERED ? 'bg-blue-500' :
+                                        status === OrderStatus.PENDING ? 'bg-slate-400' : 'bg-amber-400'}`} />
+                                    {status}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <h4 className="text-slate-900 dark:text-white font-black text-sm mb-1 leading-snug">{order.productName}</h4>
                       <p className="text-slate-500 dark:text-slate-400 text-xs font-medium mb-4">{order.clientName}</p>
