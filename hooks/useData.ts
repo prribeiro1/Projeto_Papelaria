@@ -10,11 +10,21 @@ export function useClients() {
         setLoading(true);
         const { data, error } = await supabase
             .from('clients')
-            .select('*')
+            .select('*, orders(id, value, status)')
             .order('name', { ascending: true });
 
         if (error) console.error('Error fetching clients:', error);
-        else setClients(data || []);
+        else {
+            const mappedClients = (data || []).map(client => ({
+                ...client,
+                totalSpent: (client.orders || [])
+                    .filter((o: any) => o.status === 'Entregue')
+                    .reduce((acc: number, o: any) => acc + Number(o.value), 0),
+                orderCount: (client.orders || []).length,
+                createdAt: client.created_at
+            }));
+            setClients(mappedClients);
+        }
         setLoading(false);
     }
 

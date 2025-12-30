@@ -117,7 +117,7 @@ const Clients: React.FC = () => {
                   {client.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                 </div>
                 <h3 className="text-lg font-black text-slate-800 dark:text-white mb-1 group-hover:text-emerald-500 transition-colors line-clamp-1">{client.name}</h3>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Desde {new Date().getFullYear()}</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Desde {new Date(client.createdAt).getFullYear()}</p>
 
                 <div className="w-full space-y-3 mb-8">
                   <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl flex items-center gap-3">

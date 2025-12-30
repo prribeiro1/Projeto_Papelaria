@@ -50,6 +50,7 @@ export interface Client {
   totalSpent: number;
   orderCount: number;
   status: 'Ativo' | 'Inativo' | 'VIP' | 'Novo';
+  createdAt: string;
 }
 
 export interface KanbanTask {
