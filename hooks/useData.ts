@@ -61,20 +61,43 @@ export function useOrders() {
     return { orders, loading, refresh: fetchOrders };
 }
 
+export function useTransactions() {
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    async function fetchTransactions() {
+        setLoading(true);
+        const { data, error } = await supabase
+            .from('transactions')
+            .select('*')
+            .order('date', { ascending: false });
+
+        if (error) console.error('Error fetching transactions:', error);
+        else setTransactions(data || []);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        fetchTransactions();
+    }, []);
+
+    return { transactions, loading, refresh: fetchTransactions };
+}
+
 export function useDashboardStats() {
     const [stats, setStats] = useState({
         faturamento: 0,
         despesas: 0,
         producao: 0,
-        clientesNovos: 0
+        clientesNovos: 0,
+        fluxoCaixa: [] as { date: string, value: number, type: string }[]
     });
     const [loading, setLoading] = useState(true);
 
     async function fetchStats() {
         setLoading(true);
 
-        // This is a simplified version. In a real app, we'd do more complex aggregations.
-        const { data: transactions } = await supabase.from('transactions').select('value, type');
+        const { data: transactions } = await supabase.from('transactions').select('value, type, date');
         const { data: orders } = await supabase.from('orders').select('id').eq('status', 'Em Produção');
         const { data: clients } = await supabase.from('clients').select('id');
 
@@ -90,7 +113,8 @@ export function useDashboardStats() {
             faturamento,
             despesas,
             producao: orders?.length || 0,
-            clientesNovos: clients?.length || 0
+            clientesNovos: clients?.length || 0,
+            fluxoCaixa: (transactions || []).map(t => ({ date: t.date, value: Number(t.value), type: t.type }))
         });
         setLoading(false);
     }

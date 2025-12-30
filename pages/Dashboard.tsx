@@ -1,128 +1,154 @@
-import React, { useEffect, useState } from 'react';
-import { useDashboardStats, useOrders } from '../hooks/useData';
+import React, { useMemo } from 'react';
+import { useOrders, useDashboardStats } from '../hooks/useData';
 import { supabase } from '../supabaseClient';
-import { User } from '@supabase/supabase-js';
-
-const StatCard = ({ title, value, sub, icon, color, loading }: any) => (
-  <div className="bg-white dark:bg-[#1e293b] p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
-    <div className={`absolute -right-2 -top-2 size-24 ${color} opacity-[0.03] group-hover:opacity-[0.08] transition-opacity rounded-full flex items-center justify-center`}>
-      <span className="material-symbols-outlined text-6xl">{icon}</span>
-    </div>
-    <div className="relative z-10">
-      <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">{title}</p>
-      {loading ? (
-        <div className="h-8 w-24 bg-slate-100 dark:bg-slate-800 animate-pulse rounded"></div>
-      ) : (
-        <h3 className="text-slate-900 dark:text-white text-2xl font-black">{value}</h3>
-      )}
-      <p className="text-slate-400 text-[11px] mt-1 font-medium">{sub}</p>
-    </div>
-  </div>
-);
+import { OrderStatus } from '../types';
 
 const Dashboard: React.FC = () => {
-  const { stats, loading: statsLoading } = useDashboardStats();
-  const { orders, loading: ordersLoading } = useOrders();
-  const [user, setUser] = useState<User | null>(null);
+  const { orders, loading: loadingOrders } = useOrders();
+  const { stats, loading: loadingStats } = useDashboardStats();
+  const [userName, setUserName] = React.useState('');
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserName(user?.email?.split('@')[0] || 'Usuário');
+    });
   }, []);
 
-  const userName = user?.email?.split('@')[0] || 'Visitante';
-  const recentOrders = orders.slice(0, 5);
+  const recentOrders = useMemo(() => orders.slice(0, 5), [orders]);
+
+  const getTimeGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Bom dia';
+    if (hour < 18) return 'Boa tarde';
+    return 'Boa noite';
+  };
+
+  const dashboardCards = [
+    { label: 'Faturamento Total', value: `R$ ${stats.faturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, color: 'text-primary', icon: 'payments', trend: '+12%', bg: 'bg-primary/5' },
+    { label: 'Despesas do Mês', value: `R$ ${stats.despesas.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, color: 'text-rose-500', icon: 'trending_down', trend: '-5%', bg: 'bg-rose-500/5' },
+    { label: 'Em Produção', value: stats.producao.toString(), color: 'text-amber-500', icon: 'layers', trend: '+2', bg: 'bg-amber-500/5' },
+    { label: 'Novos Clientes', value: stats.clientesNovos.toString(), color: 'text-emerald-500', icon: 'group_add', trend: '+15%', bg: 'bg-emerald-500/5' },
+  ];
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 lg:p-10">
-      <div className="max-w-6xl mx-auto space-y-10">
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div>
+    <div className="flex flex-col h-full bg-slate-50 dark:bg-[#0f172a] overflow-hidden">
+      <header className="flex-shrink-0 px-10 py-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              Olá, {userName.charAt(0).toUpperCase() + userName.slice(1)}! 👋
+              {getTimeGreeting()}, <span className="text-primary">{userName}</span>! 👋
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium text-sm">Aqui está o resumo da sua papelaria hoje.</p>
+            <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">
+              {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </p>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard
-            title="Faturamento"
-            value={`R$ ${stats.faturamento.toFixed(2)}`}
-            sub="Total em entradas"
-            icon="payments"
-            color="bg-emerald-500"
-            loading={statsLoading}
-          />
-          <StatCard
-            title="Despesas"
-            value={`R$ ${stats.despesas.toFixed(2)}`}
-            sub="Total em saídas"
-            icon="trending_down"
-            color="bg-red-500"
-            loading={statsLoading}
-          />
-          <StatCard
-            title="Produção Ativa"
-            value={stats.producao.toString()}
-            sub="Pedidos em produção"
-            icon="layers"
-            color="bg-blue-500"
-            loading={statsLoading}
-          />
-          <StatCard
-            title="Total Clientes"
-            value={stats.clientesNovos.toString()}
-            sub="Base de clientes"
-            icon="group_add"
-            color="bg-purple-500"
-            loading={statsLoading}
-          />
+      <main className="flex-1 overflow-y-auto px-10 pb-10 flex flex-col gap-10">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {dashboardCards.map((card, idx) => (
+            <div key={idx} className="group bg-white dark:bg-[#16212e] p-7 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer relative overflow-hidden">
+              <div className={`absolute top-0 right-0 size-24 ${card.bg} rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform`}></div>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={`size-10 rounded-2xl ${card.bg} ${card.color} flex items-center justify-center`}>
+                  <span className="material-symbols-outlined">{card.icon}</span>
+                </div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{card.label}</span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className={`text-2xl font-black ${card.color}`}>{card.value}</span>
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${card.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'}`}>
+                  {card.trend}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-8">
-          <div className="space-y-6">
-            <div className="bg-white dark:bg-[#1e293b] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center">
-                <h3 className="font-black text-slate-900 dark:text-white">Pedidos Recentes</h3>
+        {/* Main Content Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Recent Orders List */}
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-black text-slate-800 dark:text-white">Pedidos Recentes</h3>
+              <button className="text-xs font-black text-primary hover:underline">VER TODOS</button>
+            </div>
+            <div className="bg-white dark:bg-[#16212e] rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
+              {loadingOrders ? (
+                <div className="p-20 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
+              ) : (
+                <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {recentOrders.map(order => (
+                    <div key={order.id} className="p-6 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all flex items-center justify-between group cursor-pointer">
+                      <div className="flex items-center gap-5">
+                        <div className="size-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+                          <span className="material-symbols-outlined text-2xl">package_2</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-black text-slate-800 dark:text-slate-100">{order.clientName}</span>
+                          <span className="text-xs text-slate-400 font-medium truncate max-w-[200px]">{order.productName}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-8">
+                        <div className="hidden md:flex flex-col items-end">
+                          <span className="text-xs font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</span>
+                          <span className="text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
+                        </div>
+                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-[0.1em] border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                            order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
+                              'bg-slate-50 text-slate-400 border-slate-100'
+                          }`}>
+                          {order.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  {recentOrders.length === 0 && (
+                    <div className="py-20 flex flex-col items-center justify-center text-slate-300">
+                      <span className="material-symbols-outlined text-5xl mb-2">inbox</span>
+                      <p className="text-[10px] font-black uppercase tracking-widest">Nenhum pedido</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Quick Actions & Tips */}
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-6">
+              <h3 className="text-xl font-black text-slate-800 dark:text-white">Atalhos Rápidos</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-primary p-6 rounded-[32px] text-white shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                  <span className="material-symbols-outlined text-3xl">add_circle</span>
+                  <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Pedido</span>
+                </div>
+                <div className="bg-emerald-500 p-6 rounded-[32px] text-white shadow-xl shadow-emerald-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                  <span className="material-symbols-outlined text-3xl">person_add</span>
+                  <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Cliente</span>
+                </div>
+                <div className="bg-amber-500 p-6 rounded-[32px] text-white shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                  <span className="material-symbols-outlined text-3xl">receipt_long</span>
+                  <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Orçamento</span>
+                </div>
+                <div className="bg-slate-800 p-6 rounded-[32px] text-white shadow-xl shadow-slate-800/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
+                  <span className="material-symbols-outlined text-3xl">print</span>
+                  <span className="text-xs font-black uppercase tracking-wider leading-none">Imprimir<br />Relatórios</span>
+                </div>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50/50 dark:bg-slate-800/40">
-                    <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      <th className="px-6 py-3">ID</th>
-                      <th className="px-6 py-3">Cliente</th>
-                      <th className="px-6 py-3">Produto</th>
-                      <th className="px-6 py-3">Valor</th>
-                      <th className="px-6 py-3">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
-                    {ordersLoading ? (
-                      <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-500">Carregando pedidos...</td></tr>
-                    ) : recentOrders.length === 0 ? (
-                      <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-500">Nenhum pedido recente.</td></tr>
-                    ) : (
-                      recentOrders.map(order => (
-                        <tr key={order.id} className="text-sm hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                          <td className="px-6 py-4 font-mono text-xs text-slate-500">{order.id.slice(0, 6).toUpperCase()}</td>
-                          <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{order.clientName}</td>
-                          <td className="px-6 py-4 text-slate-500">{order.productName}</td>
-                          <td className="px-6 py-4 font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</td>
-                          <td className="px-6 py-4">
-                            <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] font-black uppercase">
-                              {order.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
+            </div>
+
+            <div className="bg-slate-900 rounded-[40px] p-8 text-white relative overflow-hidden group">
+              <div className="absolute top-0 right-0 size-40 bg-primary/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform"></div>
+              <h4 className="text-lg font-black mb-2 relative z-10">Dica do PapelariaSys</h4>
+              <p className="text-sm text-slate-400 font-medium relative z-10 leading-relaxed mb-6">Mantenha seus prazos atualizados na aba de Produção para receber alertas automáticos.</p>
+              <button className="bg-white/10 hover:bg-white/20 transition-all text-white text-[10px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl relative z-10">Acessar Produção</button>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
