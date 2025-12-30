@@ -127,7 +127,7 @@ const Settings: React.FC = () => {
                                 <div className="md:col-span-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Modelo de Mensagem WhatsApp (Orçamentos)</label>
                                     <textarea rows={3} className="w-full p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" value={formData.quote_message_template} onChange={e => setFormData({ ...formData, quote_message_template: e.target.value })} />
-                                    <p className="text-[10px] text-slate-400 mt-2 ml-1">Use <code className="text-primary font-black">{"{{clientName}}"}</code>, <code className="text-primary font-black">{"{{description}}"}</code> e <code className="text-primary font-black">{"{{total}}"}</code> como variáveis.</p>
+                                    <p className="text-[10px] text-slate-400 mt-2 ml-1">Use <code className="text-primary font-black">{"{{clientName}}"}</code>, <code className="text-primary font-black">{"{{description}}"}</code>, <code className="text-primary font-black">{"{{total}}"}</code> e <code className="text-primary font-black">{"{{pixKey}}"}</code> como variáveis.</p>
                                 </div>
                             </div>
 

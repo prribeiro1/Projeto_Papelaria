@@ -95,7 +95,12 @@ const Orders: React.FC = () => {
       return;
     }
 
-    const message = `Olá ${order.clientName}! Passando para informar que seu pedido (#${order.id.slice(0, 8)}) está com status: ${order.status.toUpperCase()}. Qualquer dúvida, estamos à disposição!`;
+    let message = `Olá ${order.clientName}! Passando para informar que seu pedido (#${order.id.slice(0, 8)}) está com status: ${order.status.toUpperCase()}. Qualquer dúvida, estamos à disposição!`;
+
+    if (settings?.pixKey) {
+      message += `\n\nCaso deseje realizar o pagamento via PIX, nossa chave é: *${settings.pixKey}*`;
+    }
+
     const encoded = encodeURIComponent(message);
     window.open(`https://wa.me/${client.phone.replace(/\D/g, '')}?text=${encoded}`, '_blank');
   };
@@ -414,10 +419,10 @@ const Orders: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+          </div >
+        </div >
       )}
-    </div>
+    </div >
   );
 };
 

@@ -30,6 +30,18 @@ const Quotes: React.FC = () => {
         items: [{ description: '', quantity: 1, unitValue: 0 }]
     });
 
+    const addItem = () => setNewQuote({ ...newQuote, items: [...newQuote.items, { description: '', quantity: 1, unitValue: 0 }] });
+    const removeItem = (index: number) => setNewQuote({ ...newQuote, items: newQuote.items.filter((_, i) => i !== index) });
+    const updateItem = (index: number, field: string, value: any) => {
+        const newItems = [...newQuote.items];
+        (newItems[index] as any)[field] = value;
+        setNewQuote({ ...newQuote, items: newItems });
+    };
+
+    const quoteSubtotal = useMemo(() => {
+        return newQuote.items.reduce((acc, item) => acc + (item.quantity * item.unitValue), 0);
+    }, [newQuote.items]);
+
     const filteredQuotes = useMemo(() =>
         quotes.filter(q =>
             q.clientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -65,7 +77,7 @@ const Quotes: React.FC = () => {
         const { error } = await supabase.from('quotes').insert([{
             client_id: finalClientId,
             description: newQuote.description,
-            value: newQuote.value,
+            value: quoteSubtotal,
             valid_until: newQuote.valid_until,
             event_date: newQuote.event_date || null,
             theme: newQuote.theme || null,
@@ -114,7 +126,8 @@ const Quotes: React.FC = () => {
         let msg = settings?.quoteMessageTemplate || 'Olá {{clientName}}! Segue em anexo o orçamento: *{{description}}* no valor de *R$ {{total}}*. Aguardamos sua confirmação!';
         msg = msg.replace('{{clientName}}', quote.clientName || 'Cliente')
             .replace('{{description}}', quote.description)
-            .replace('{{total}}', quote.value.toFixed(2));
+            .replace('{{total}}', quote.value.toFixed(2))
+            .replace('{{pixKey}}', settings?.pixKey || '');
         setCustomMessage(msg);
         setIsShareModalOpen(true);
     };
@@ -297,13 +310,34 @@ const Quotes: React.FC = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Descrição Geral</label>
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Descrição Geral (Título)</label>
                                 <input required placeholder="Ex: Kit Festa Personalizada" className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newQuote.description} onChange={e => setNewQuote({ ...newQuote, description: e.target.value })} />
                             </div>
-                            <div>
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Valor do Orçamento (R$)</label>
-                                <input type="number" step="0.01" required className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-black" value={newQuote.value} onChange={e => setNewQuote({ ...newQuote, value: Number(e.target.value) })} />
+
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Itens do Orçamento</h4>
+                                    <button type="button" onClick={addItem} className="text-[10px] font-black text-amber-500 uppercase tracking-wider flex items-center gap-1">+ Adicionar Item</button>
+                                </div>
+                                <div className="space-y-3">
+                                    {newQuote.items.map((item, idx) => (
+                                        <div key={idx} className="flex gap-3">
+                                            <input placeholder="Descrição..." className="flex-1 h-10 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs" value={item.description} onChange={e => updateItem(idx, 'description', e.target.value)} />
+                                            <input type="number" className="w-16 h-10 px-2 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs text-center font-black" value={item.quantity} onChange={e => updateItem(idx, 'quantity', Number(e.target.value))} />
+                                            <input type="number" step="0.01" className="w-24 h-10 px-2 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs text-right font-black" value={item.unitValue} onChange={e => updateItem(idx, 'unitValue', Number(e.target.value))} />
+                                            <button type="button" onClick={() => removeItem(idx)} className="text-slate-300 hover:text-red-500">
+                                                <span className="material-symbols-outlined">delete</span>
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
+                            <div className="bg-amber-50 dark:bg-amber-900/10 p-6 rounded-3xl border border-amber-100 dark:border-amber-900/20 flex justify-between items-center">
+                                <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Total do Orçamento</span>
+                                <span className="text-2xl font-black text-amber-600">R$ {quoteSubtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                            </div>
+
                             <div className="pt-6 flex gap-4">
                                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 h-14 rounded-2xl text-sm font-black text-slate-400 hover:text-slate-600 transition-all">Cancelar</button>
                                 <button type="submit" className="flex-1 h-14 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-black shadow-xl shadow-amber-500/30 transition-all active:scale-95">
@@ -399,11 +433,21 @@ const Quotes: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style={{ borderBottom: '2px solid #f1f5f9' }}>
-                                <td style={{ padding: '25px 20px', fontSize: '16px', fontWeight: 'bold', color: '#334155' }}>{selectedQuote?.description}</td>
-                                <td style={{ padding: '25px 20px', fontSize: '16px', textAlign: 'center', color: '#334155' }}>1</td>
-                                <td style={{ padding: '25px 20px', fontSize: '16px', textAlign: 'right', color: '#10b981', fontWeight: '900' }}>R$ {selectedQuote?.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
-                            </tr>
+                            {selectedQuote?.items && selectedQuote.items.length > 0 ? (
+                                selectedQuote.items.map((item: any, idx: number) => (
+                                    <tr key={idx} style={{ borderBottom: '2px solid #f1f5f9' }}>
+                                        <td style={{ padding: '25px 20px', fontSize: '16px', fontWeight: 'bold', color: '#334155' }}>{item.description}</td>
+                                        <td style={{ padding: '25px 20px', fontSize: '16px', textAlign: 'center', color: '#334155' }}>{item.quantity}</td>
+                                        <td style={{ padding: '25px 20px', fontSize: '16px', textAlign: 'right', color: '#10b981', fontWeight: '900' }}>R$ {(item.quantity * item.unitValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr style={{ borderBottom: '2px solid #f1f5f9' }}>
+                                    <td style={{ padding: '25px 20px', fontSize: '16px', fontWeight: 'bold', color: '#334155' }}>{selectedQuote?.description}</td>
+                                    <td style={{ padding: '25px 20px', fontSize: '16px', textAlign: 'center', color: '#334155' }}>1</td>
+                                    <td style={{ padding: '25px 20px', fontSize: '16px', textAlign: 'right', color: '#10b981', fontWeight: '900' }}>R$ {selectedQuote?.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
