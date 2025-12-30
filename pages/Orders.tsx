@@ -15,7 +15,7 @@ const Orders: React.FC = () => {
 
   // New Order State
   const [newOrder, setNewOrder] = useState({
-    client_id: '',
+    clientSelector: '', // name or ID name
     product_name: '', // This will be the main title/summary
     discount: 0,
     amount_paid: 0,
@@ -107,10 +107,31 @@ const Orders: React.FC = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
+    // 1. Resolve Client ID (Search by name or Create)
+    let finalClientId = '';
+    const existingClient = clients.find(c => c.name.toLowerCase() === newOrder.clientSelector.toLowerCase());
+
+    if (existingClient) {
+      finalClientId = existingClient.id;
+    } else {
+      const { data: createdClient, error: clientErr } = await supabase
+        .from('clients')
+        .insert([{ name: newOrder.clientSelector, user_id: user.id, status: 'Novo' }])
+        .select()
+        .single();
+
+      if (clientErr) {
+        alert('Erro ao criar cliente automaticamente: ' + clientErr.message);
+        setSaving(false);
+        return;
+      }
+      finalClientId = createdClient.id;
+    }
+
     const productNameSummary = items.map(i => `${i.quantity}x ${i.description}`).join(', ');
 
     const { error } = await supabase.from('orders').insert([{
-      client_id: newOrder.client_id,
+      client_id: finalClientId,
       product_name: productNameSummary || newOrder.product_name,
       value: total,
       status: newOrder.status,
@@ -138,7 +159,7 @@ const Orders: React.FC = () => {
 
   const resetForm = () => {
     setNewOrder({
-      client_id: '', product_name: '', discount: 0, amount_paid: 0,
+      clientSelector: '', product_name: '', discount: 0, amount_paid: 0,
       status: OrderStatus.PENDING, production_status: 'Aguardando',
       deadline: '', event_date: '', theme: '', notes: '', cost_value: 0
     });
@@ -295,15 +316,17 @@ const Orders: React.FC = () => {
                     <div className="grid grid-cols-1 gap-4">
                       <div>
                         <label className="text-xs font-black text-slate-500 mb-1.5 ml-1 block">Cliente *</label>
-                        <select
+                        <input
                           required
+                          list="clients-list"
+                          placeholder="Digite o nome do cliente..."
                           className="w-full h-12 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold outline-none"
-                          value={newOrder.client_id}
-                          onChange={e => setNewOrder({ ...newOrder, client_id: e.target.value })}
-                        >
-                          <option value="">Selecione o cliente...</option>
-                          {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                        </select>
+                          value={newOrder.clientSelector}
+                          onChange={e => setNewOrder({ ...newOrder, clientSelector: e.target.value })}
+                        />
+                        <datalist id="clients-list">
+                          {clients.map(c => <option key={c.id} value={c.name} />)}
+                        </datalist>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>

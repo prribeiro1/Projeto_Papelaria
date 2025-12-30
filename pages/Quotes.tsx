@@ -20,7 +20,7 @@ const Quotes: React.FC = () => {
     const [converting, setConverting] = useState<string | null>(null);
 
     const [newQuote, setNewQuote] = useState({
-        client_id: '',
+        clientSelector: '',
         description: '',
         value: 0,
         valid_until: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -42,8 +42,28 @@ const Quotes: React.FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
+        // 1. Resolve Client ID (Search by name or Create)
+        let finalClientId = '';
+        const existingClient = clients.find(c => c.name.toLowerCase() === newQuote.clientSelector.toLowerCase());
+
+        if (existingClient) {
+            finalClientId = existingClient.id;
+        } else {
+            const { data: createdClient, error: clientErr } = await supabase
+                .from('clients')
+                .insert([{ name: newQuote.clientSelector, user_id: user.id, status: 'Novo' }])
+                .select()
+                .single();
+
+            if (clientErr) {
+                alert('Erro ao criar cliente automaticamente: ' + clientErr.message);
+                return;
+            }
+            finalClientId = createdClient.id;
+        }
+
         const { error } = await supabase.from('quotes').insert([{
-            client_id: newQuote.client_id,
+            client_id: finalClientId,
             description: newQuote.description,
             value: newQuote.value,
             valid_until: newQuote.valid_until,
@@ -249,10 +269,17 @@ const Quotes: React.FC = () => {
                             <div className="grid grid-cols-2 gap-6">
                                 <div>
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Cliente</label>
-                                    <select required className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold" value={newQuote.client_id} onChange={e => setNewQuote({ ...newQuote, client_id: e.target.value })}>
-                                        <option value="">Selecione...</option>
-                                        {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                                    </select>
+                                    <input
+                                        required
+                                        list="clients-list"
+                                        placeholder="Digite o nome do cliente..."
+                                        className="w-full h-12 px-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold shadow-sm focus:ring-4 focus:ring-amber-500/10 transition-all outline-none"
+                                        value={newQuote.clientSelector}
+                                        onChange={e => setNewQuote({ ...newQuote, clientSelector: e.target.value })}
+                                    />
+                                    <datalist id="clients-list">
+                                        {clients.map(c => <option key={c.id} value={c.name} />)}
+                                    </datalist>
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Validade</label>
