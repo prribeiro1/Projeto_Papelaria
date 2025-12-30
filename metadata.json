@@ -1,0 +1,8 @@
+{
+  "name": "Papelaria Sys - ERP",
+  "description": "Sistema completo de gestão para papelarias e gráficas rápidas, incluindo controle de pedidos, fluxo de produção Kanban, gestão de clientes e dashboards financeiros.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
