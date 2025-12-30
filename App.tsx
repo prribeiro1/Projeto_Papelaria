@@ -7,6 +7,8 @@ import Clients from './pages/Clients';
 import Financeiro from './pages/Financeiro';
 import Despesas from './pages/Despesas';
 import Auth from './pages/Auth';
+import Quotes from './pages/Quotes';
+import Settings from './pages/Settings';
 import { supabase } from './supabaseClient';
 import { Session } from '@supabase/supabase-js';
 
@@ -163,13 +165,13 @@ const App: React.FC = () => {
             <Route path="/pedidos" element={session ? <Orders /> : <Navigate to="/auth" />} />
             <Route path="/producao" element={session ? <Production /> : <Navigate to="/auth" />} />
             <Route path="/clientes" element={session ? <Clients /> : <Navigate to="/auth" />} />
-            <Route path="/orcamentos" element={session ? <Placeholder title="Orçamentos" /> : <Navigate to="/auth" />} />
+            <Route path="/orcamentos" element={session ? <Quotes /> : <Navigate to="/auth" />} />
             <Route path="/financeiro" element={session ? <Financeiro /> : <Navigate to="/auth" />} />
             <Route path="/despesas" element={session ? <Despesas /> : <Navigate to="/auth" />} />
             <Route path="/pro-labore" element={session ? <Placeholder title="Pró-labore" /> : <Navigate to="/auth" />} />
             <Route path="/produtos" element={session ? <Placeholder title="Produtos" /> : <Navigate to="/auth" />} />
             <Route path="/backup" element={session ? <Placeholder title="Backup" /> : <Navigate to="/auth" />} />
-            <Route path="/configuracao" element={session ? <Placeholder title="Configuração" /> : <Navigate to="/auth" />} />
+            <Route path="/configuracao" element={session ? <Settings /> : <Navigate to="/auth" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

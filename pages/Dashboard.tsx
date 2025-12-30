@@ -24,10 +24,10 @@ const Dashboard: React.FC = () => {
   };
 
   const dashboardCards = [
-    { label: 'Faturamento Total', value: `R$ ${stats.faturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, color: 'text-primary', icon: 'payments', trend: '+12%', bg: 'bg-primary/5' },
-    { label: 'Despesas do Mês', value: `R$ ${stats.despesas.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, color: 'text-rose-500', icon: 'trending_down', trend: '-5%', bg: 'bg-rose-500/5' },
-    { label: 'Em Produção', value: stats.producao.toString(), color: 'text-amber-500', icon: 'layers', trend: '+2', bg: 'bg-amber-500/5' },
-    { label: 'Novos Clientes', value: stats.clientesNovos.toString(), color: 'text-emerald-500', icon: 'group_add', trend: '+15%', bg: 'bg-emerald-500/5' },
+    { label: 'Lucro Estimado', value: `R$ ${stats.totalProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, color: 'text-emerald-500', icon: 'payments', trend: '+12%', bg: 'bg-emerald-500/5' },
+    { label: 'Pagamentos Pendentes', value: stats.pendingPayments.toString(), color: 'text-amber-500', icon: 'warning', trend: stats.pendingPayments > 0 ? 'Atenção' : 'OK', bg: 'bg-amber-500/5' },
+    { label: 'Em Produção', value: stats.ordersInProduction.toString(), color: 'text-primary', icon: 'layers', trend: 'Ativos', bg: 'bg-primary/5' },
+    { label: 'Novos Clientes', value: stats.newClients.toString(), color: 'text-purple-500', icon: 'group_add', trend: 'Base', bg: 'bg-purple-500/5' },
   ];
 
   return (
@@ -97,8 +97,8 @@ const Dashboard: React.FC = () => {
                           <span className="text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
                         </div>
                         <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-[0.1em] border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                            order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
-                              'bg-slate-50 text-slate-400 border-slate-100'
+                          order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
+                            'bg-slate-50 text-slate-400 border-slate-100'
                           }`}>
                           {order.status}
                         </span>

@@ -4,13 +4,13 @@ import { OrderStatus, Order, Client, KanbanTask, Quote, Product, Transaction } f
 export const INITIAL_ORDERS: Order[] = [
   { id: '4582', clientName: 'Mariana Silva', clientEmail: 'mariana.silva@email.com', productName: '100x Convites Luxo', value: 450.00, status: OrderStatus.WAITING_ART, createdAt: '12/10/2023', deadline: '20/10/2023' },
   { id: '4581', clientName: 'João Souza', clientEmail: 'joao.souza@email.com', productName: 'Banner Lona 2x1', value: 120.00, status: OrderStatus.IN_PRODUCTION, createdAt: '10/10/2023', deadline: '15/10/2023' },
-  { id: '4580', clientName: 'Empresa Tech', clientEmail: 'contato@tech.com', productName: '500x Cartões Visita', value: 89.90, status: OrderStatus.FINISHING, createdAt: '08/10/2023', deadline: '12/10/2023' },
+  { id: '4580', clientName: 'Empresa Tech', clientEmail: 'contato@tech.com', productName: '500x Cartões Visita', value: 89.90, status: OrderStatus.READY, createdAt: '08/10/2023', deadline: '12/10/2023' },
 ];
 
 export const INITIAL_QUOTES: Quote[] = [
-  { id: 'Q-901', clientName: 'Clínica Sorriso', description: 'Reforma de Fachada + Adesivagem', value: 1250.00, status: 'Enviado', validUntil: '30/10/2023' },
-  { id: 'Q-902', clientName: 'Escola ABC', description: '50x Agendas Escolares 2024', value: 2400.00, status: 'Aprovado', validUntil: '25/10/2023' },
-  { id: 'Q-903', clientName: 'Padaria Pão Quente', description: '1000x Panfletos Couchê', value: 180.00, status: 'Rascunho', validUntil: '01/11/2023' },
+  { id: 'Q-901', clientId: '4092', clientName: 'Clínica Sorriso', description: 'Reforma de Fachada + Adesivagem', value: 1250.00, items: [], status: 'Enviado', validUntil: '30/10/2023' },
+  { id: 'Q-902', clientId: '4094', clientName: 'Escola ABC', description: '50x Agendas Escolares 2024', value: 2400.00, items: [], status: 'Aprovado', validUntil: '25/10/2023' },
+  { id: 'Q-903', clientId: '4092', clientName: 'Padaria Pão Quente', description: '1000x Panfletos Couchê', value: 180.00, items: [], status: 'Rascunho', validUntil: '01/11/2023' },
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [

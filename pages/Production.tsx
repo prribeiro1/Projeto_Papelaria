@@ -11,7 +11,6 @@ const Production: React.FC = () => {
     OrderStatus.PENDING,
     OrderStatus.WAITING_ART,
     OrderStatus.IN_PRODUCTION,
-    OrderStatus.FINISHING,
     OrderStatus.READY
   ];
 
@@ -134,8 +133,8 @@ const Production: React.FC = () => {
                 <div key={idx} className={`min-h-[120px] bg-white dark:bg-[#16212e] p-2 flex flex-col gap-1 ${!item.day ? 'bg-slate-50/50 dark:bg-slate-900/50' : ''}`}>
                   {item.day && (
                     <span className={`text-xs font-bold mb-1 ml-1 ${item.day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth()
-                        ? 'bg-primary text-white size-6 rounded-lg flex items-center justify-center'
-                        : 'text-slate-400'
+                      ? 'bg-primary text-white size-6 rounded-lg flex items-center justify-center'
+                      : 'text-slate-400'
                       }`}>
                       {item.day}
                     </span>
@@ -158,8 +157,8 @@ const Production: React.FC = () => {
                 <div className="flex items-center justify-between mb-4 px-2">
                   <div className="flex items-center gap-3">
                     <div className={`size-3 rounded-full ${stage === OrderStatus.PENDING ? 'bg-slate-400 shadow-[0_0_8px_rgba(148,163,184,0.5)]' :
-                        stage === OrderStatus.IN_PRODUCTION ? 'bg-primary shadow-[0_0_8px_rgba(124,58,237,0.5)]' :
-                          stage === OrderStatus.READY ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]'
+                      stage === OrderStatus.IN_PRODUCTION ? 'bg-primary shadow-[0_0_8px_rgba(124,58,237,0.5)]' :
+                        stage === OrderStatus.READY ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]'
                       }`}></div>
                     <h3 className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">{stage}</h3>
                     <span className="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-black px-2 py-0.5 rounded-full">

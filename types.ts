@@ -3,7 +3,6 @@ export enum OrderStatus {
   PENDING = 'Pendente',
   IN_PRODUCTION = 'Em Produção',
   WAITING_ART = 'Aguardando Arte',
-  FINISHING = 'Acabamento',
   READY = 'Pronto p/ Retirada',
   DELIVERED = 'Entregue'
 }
@@ -14,18 +13,25 @@ export interface Order {
   clientEmail: string;
   productName: string;
   value: number;
+  costValue?: number;
   status: OrderStatus;
   createdAt: string;
   deadline: string;
+  items?: any[];
 }
 
 export interface Quote {
   id: string;
-  clientName: string;
+  clientName?: string;
+  clientId: string;
   description: string;
   value: number;
+  items: any[];
   status: 'Rascunho' | 'Enviado' | 'Aprovado' | 'Recusado';
   validUntil: string;
+  eventDate?: string;
+  theme?: string;
+  notes?: string;
 }
 
 export interface Client {
@@ -67,4 +73,15 @@ export interface Transaction {
   date: string;
   category: string;
   type: 'Entrada' | 'Saída';
+}
+
+export interface CompanySettings {
+  id: string;
+  name: string;
+  logoUrl?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  pixKey?: string;
+  quoteMessageTemplate?: string;
 }

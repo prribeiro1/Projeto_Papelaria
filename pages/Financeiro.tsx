@@ -11,9 +11,7 @@ const Financeiro: React.FC = () => {
         { label: 'Dinheiro', value: 0, icon: 'payments', color: 'bg-amber-500' },
     ];
 
-    // In a real scenario, we'd filter transactions by payment method
-    // For now, let's distribute roughly for UI demonstration
-    const faturamentoTotal = stats.faturamento;
+    const faturamentoTotal = stats.totalRevenue || 0;
     paymentMethods[0].value = faturamentoTotal * 0.6;
     paymentMethods[1].value = faturamentoTotal * 0.3;
     paymentMethods[2].value = faturamentoTotal * 0.1;
@@ -39,7 +37,6 @@ const Financeiro: React.FC = () => {
             </header>
 
             <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-8">
-                {/* Payment Methods Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {paymentMethods.map((method, idx) => (
                         <div key={idx} className="bg-white dark:bg-[#16212e] p-6 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -58,27 +55,22 @@ const Financeiro: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Cash Flow Summary */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="bg-white dark:bg-[#16212e] p-8 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2 bg-white dark:bg-[#16212e] p-8 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-lg font-black text-slate-800 dark:text-white">Fluxo de Caixa</h3>
-                            <select className="bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500 outline-none">
-                                <option>Últimos 30 dias</option>
-                                <option>Últimos 7 dias</option>
-                                <option>Este ano</option>
-                            </select>
+                            <h3 className="text-lg font-black text-slate-800 dark:text-white">Relatório BI de Saúde Financeira</h3>
                         </div>
-                        <div className="flex items-end gap-2 h-48">
-                            {/* Simple Bar Chart Placeholder */}
-                            {[40, 65, 45, 90, 55, 75, 60, 85, 40, 70, 50, 65].map((h, i) => (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg relative overflow-hidden flex items-end" style={{ height: '100%' }}>
-                                        <div className="w-full bg-primary/20 group-hover:bg-primary/40 transition-all rounded-t-lg" style={{ height: `${h}%` }}></div>
-                                    </div>
-                                    <span className="text-[10px] font-bold text-slate-400">{i + 1}</span>
-                                </div>
-                            ))}
+                        <div className="grid grid-cols-2 gap-6">
+                            <div className="p-6 rounded-[28px] bg-slate-50 dark:bg-slate-800/50">
+                                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Lucro Líquido Real</span>
+                                <span className="text-2xl font-black text-emerald-500">R$ {stats.totalProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                <p className="text-[10px] text-slate-400 mt-1 font-bold">Baseado no custo de insumos</p>
+                            </div>
+                            <div className="p-6 rounded-[28px] bg-slate-50 dark:bg-slate-800/50">
+                                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Inadimplência (Pendentes)</span>
+                                <span className="text-2xl font-black text-amber-500">{stats.pendingPayments} Pedidos</span>
+                                <p className="text-[10px] text-slate-400 mt-1 font-bold">Pagamentos não integralizados</p>
+                            </div>
                         </div>
                     </div>
 
@@ -91,28 +83,27 @@ const Financeiro: React.FC = () => {
                                         <span className="material-symbols-outlined text-emerald-500">trending_up</span>
                                         <span className="text-sm font-bold text-slate-600 dark:text-slate-300">Total Recebido</span>
                                     </div>
-                                    <span className="text-lg font-black text-emerald-600">R$ {stats.faturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                    <span className="text-lg font-black text-emerald-600">R$ {stats.totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                                 </div>
                                 <div className="flex items-center justify-between p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/20">
                                     <div className="flex items-center gap-3">
                                         <span className="material-symbols-outlined text-rose-500">trending_down</span>
                                         <span className="text-sm font-bold text-slate-600 dark:text-slate-300">Total Pago</span>
                                     </div>
-                                    <span className="text-lg font-black text-rose-600">R$ {stats.despesas.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                    <span className="text-lg font-black text-rose-600">R$ {stats.monthlyExpenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                                 </div>
                                 <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                                     <div className="flex items-center gap-3">
                                         <span className="material-symbols-outlined text-primary">balance</span>
                                         <span className="text-sm font-bold text-slate-600 dark:text-slate-300">Saldo Líquido</span>
                                     </div>
-                                    <span className="text-lg font-black text-primary">R$ {(stats.faturamento - stats.despesas).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                    <span className="text-lg font-black text-primary">R$ {(stats.totalRevenue - stats.monthlyExpenses).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* History */}
                 <div className="bg-white dark:bg-[#16212e] rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
                     <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <h3 className="text-lg font-black text-slate-800 dark:text-white">Últimas Transações</h3>
@@ -132,7 +123,7 @@ const Financeiro: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                    {transactions.map((t, idx) => (
+                                    {transactions.slice(0, 10).map((t, idx) => (
                                         <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                                             <td className="px-8 py-5 text-sm font-medium text-slate-500">{new Date(t.date).toLocaleDateString()}</td>
                                             <td className="px-8 py-5">
