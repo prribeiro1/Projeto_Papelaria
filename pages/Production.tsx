@@ -68,7 +68,7 @@ const Production: React.FC = () => {
   const monthName = currentDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-[#0f172a]">
+    <div className="flex flex-col min-h-full bg-background-light dark:bg-background-dark">
       {/* Header */}
       <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-5 flex items-center justify-between">
         <div className="flex flex-col">

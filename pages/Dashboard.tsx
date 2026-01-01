@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-[#0f172a] overflow-hidden">
+    <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
       <header className="flex-shrink-0 px-10 py-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">

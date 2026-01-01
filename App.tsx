@@ -40,7 +40,7 @@ const Sidebar = ({ session }: { session: Session | null }) => {
         { path: '/', label: 'Início', icon: 'dashboard' },
         { path: '/pedidos', label: 'Pedidos', icon: 'shopping_bag' },
         { path: '/orcamentos', label: 'Orçamentos', icon: 'request_quote' },
-        { path: '/producao', label: 'Produção', icon: 'layers', badge: '8' },
+        { path: '/producao', label: 'Produção', icon: 'layers' },
       ]
     },
     {
@@ -65,12 +65,11 @@ const Sidebar = ({ session }: { session: Session | null }) => {
     <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 h-full flex-none">
       <div className="p-8 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-4">
-          <div className="bg-slate-900 dark:bg-black rounded-2xl p-2 flex items-center justify-center size-10 text-white shadow-xl shadow-slate-900/10">
+          <div className="bg-primary rounded-2xl p-2 flex items-center justify-center size-10 text-white shadow-xl shadow-primary/20">
             <span className="material-symbols-outlined font-black text-2xl">rocket_launch</span>
           </div>
           <div>
-            <h1 className="text-slate-900 dark:text-white text-xl font-black tracking-tight leading-none">PRO<span className="text-primary">ATIVX</span></h1>
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Business Intelligence</span>
+            <h1 className="text-primary text-xl font-black tracking-tight leading-none">PRO<span className="text-secondary">ATIVX</span></h1>
           </div>
         </div>
       </div>
@@ -94,10 +93,10 @@ const Sidebar = ({ session }: { session: Session | null }) => {
                 <span className={`text-sm ${isActive(item.path) ? 'font-black' : 'font-bold'}`}>
                   {item.label}
                 </span>
-                {item.badge && (
+                {(item as any).badge && (
                   <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-lg ${isActive(item.path) ? 'bg-white/20 text-white' : 'bg-red-500 text-white shadow-lg shadow-red-500/20'
                     }`}>
-                    {item.badge}
+                    {(item as any).badge}
                   </span>
                 )}
               </Link>

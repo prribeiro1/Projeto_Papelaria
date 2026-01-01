@@ -49,7 +49,7 @@ const Backup: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 dark:bg-[#0f172a]">
+        <div className="flex flex-col h-full bg-background-light dark:bg-background-dark">
             <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6">
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 text-primary">
@@ -106,8 +106,8 @@ const Backup: React.FC = () => {
 
                 {status.type !== 'none' && (
                     <div className={`p-6 rounded-[32px] border flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-300 ${status.type === 'success'
-                            ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-900/20 text-emerald-600'
-                            : 'bg-rose-50 dark:bg-rose-900/10 border-rose-100 dark:border-rose-900/20 text-rose-600'
+                        ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-900/20 text-emerald-600'
+                        : 'bg-rose-50 dark:bg-rose-900/10 border-rose-100 dark:border-rose-900/20 text-rose-600'
                         }`}>
                         <span className="material-symbols-outlined">
                             {status.type === 'success' ? 'check_circle' : 'error'}
