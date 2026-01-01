@@ -107,13 +107,13 @@ const Financeiro: React.FC = () => {
                         <div className="grid grid-cols-2 gap-6">
                             <div className="p-6 rounded-[28px] bg-slate-50 dark:bg-slate-800/50">
                                 <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Lucro Líquido Real</span>
-                                <span className="text-2xl font-black text-emerald-500">R$ {stats.totalProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                                <p className="text-[10px] text-slate-400 mt-1 font-bold">Baseado no custo de insumos</p>
+                                <span className={`text-2xl font-black ${stats.totalProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>R$ {stats.totalProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                <p className="text-[10px] text-slate-400 mt-1 font-bold">Saldo total (Receitas - Custos - Despesas)</p>
                             </div>
                             <div className="p-6 rounded-[28px] bg-slate-50 dark:bg-slate-800/50">
                                 <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Inadimplência (Pendentes)</span>
                                 <span className="text-2xl font-black text-amber-500">{stats.pendingPayments} Pedidos</span>
-                                <p className="text-[10px] text-slate-400 mt-1 font-bold">Pagamentos não integralizados</p>
+                                <p className="text-[10px] text-slate-400 mt-1 font-bold">Pedidos ativos com saldo a pagar</p>
                             </div>
                         </div>
                     </div>

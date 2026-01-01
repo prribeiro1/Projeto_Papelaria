@@ -9,11 +9,20 @@ const Production: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
-  const handleStatusUpdate = async (orderId: string, newStatus: OrderStatus) => {
+  const handleStatusUpdate = async (order: Order, newStatus: OrderStatus) => {
+    let updateData: any = { status: newStatus };
+
+    if (newStatus === OrderStatus.DELIVERED) {
+      const isPaid = window.confirm(`O pedido de ${order.clientName} já foi totalmente pago? (Valor: R$ ${order.value.toFixed(2)})`);
+      if (isPaid) {
+        updateData.amount_paid = order.value;
+      }
+    }
+
     const { error } = await supabase
       .from('orders')
-      .update({ status: newStatus })
-      .eq('id', orderId);
+      .update(updateData)
+      .eq('id', order.id);
 
     if (error) {
       alert('Erro ao atualizar status: ' + error.message);
@@ -157,11 +166,22 @@ const Production: React.FC = () => {
                       </span>
                     )}
                     <div className="flex flex-col gap-1 overflow-y-auto max-h-[80px] custom-scrollbar">
-                      {item.orders.map(order => (
-                        <div key={order.id} className="text-[10px] px-2 py-1 rounded bg-primary/5 text-primary border border-primary/10 font-bold truncate" title={order.productName}>
-                          {order.productName}
-                        </div>
-                      ))}
+                      {item.orders.map(order => {
+                        const isDone = order.status === OrderStatus.READY || order.status === OrderStatus.DELIVERED;
+                        return (
+                          <div
+                            key={order.id}
+                            className={`text-[10px] px-2 py-1 rounded border font-bold truncate flex items-center gap-1 ${isDone
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                                : 'bg-primary/5 text-primary border-primary/10'
+                              }`}
+                            title={`${order.productName} (${order.status})`}
+                          >
+                            {isDone && <span className="material-symbols-outlined text-[12px]">check_circle</span>}
+                            {order.productName}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
@@ -209,7 +229,7 @@ const Production: React.FC = () => {
                                 {Object.values(OrderStatus).map((status) => (
                                   <button
                                     key={status}
-                                    onClick={() => handleStatusUpdate(order.id, status)}
+                                    onClick={() => handleStatusUpdate(order, status)}
                                     className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${order.status === status
                                       ? 'bg-primary text-white'
                                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
