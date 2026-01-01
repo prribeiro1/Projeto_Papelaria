@@ -18,8 +18,8 @@ const SubscriptionPage: React.FC = () => {
     const getStripeUrl = (priceId: string) => {
         // Stripe Payment Links for PROATIVX
         const baseUrl = priceId === 'price_1Skn4hLY4Lc1mlrLLB0doYYq'
-            ? 'https://buy.stripe.com/6oEbKy1G74Lc1mlrLL'
-            : 'https://buy.stripe.com/6oEbKy1G74Lc1mlrLS';
+            ? 'https://buy.stripe.com/bJe5kE8a0enY6Ts3lzbwk04'
+            : 'https://buy.stripe.com/aFaeVegGwa7Ib9I8FTbwk05';
 
         return `${baseUrl}?client_reference_id=${userId}`;
     };
@@ -100,7 +100,7 @@ const SubscriptionPage: React.FC = () => {
 
                             <div className="mt-8 mb-10">
                                 <h1 className="text-3xl font-black text-slate-900 dark:text-white italic mb-2">Planos <span className="text-primary">PROATIVX</span></h1>
-                                <p className="text-sm text-slate-500 font-medium">Escolha a melhor option para o seu negócio</p>
+                                <p className="text-sm text-slate-500 font-medium">Escolha a melhor opção para o seu negócio</p>
                             </div>
 
                             <div className="space-y-4">
