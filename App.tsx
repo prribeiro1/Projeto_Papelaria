@@ -64,12 +64,12 @@ const Sidebar = ({ session }: { session: Session | null }) => {
   return (
     <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 h-full flex-none">
       <div className="p-8 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center gap-4">
-          <div className="size-16 rounded-2xl flex items-center justify-center overflow-hidden">
-            <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain" />
+        <div className="flex items-center gap-2">
+          <div className="size-20 rounded-2xl flex items-center justify-center overflow-hidden">
+            <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain scale-110" />
           </div>
           <div>
-            <h1 className="text-primary text-xl font-black tracking-tight leading-none italic">PRO<span className="text-secondary">ATIVX</span></h1>
+            <h1 className="text-primary text-2xl font-black tracking-tighter leading-none italic">PRO<span className="text-secondary">ATIVX</span></h1>
           </div>
         </div>
       </div>

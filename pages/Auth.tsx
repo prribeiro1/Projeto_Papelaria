@@ -39,15 +39,15 @@ export default function Auth() {
                 <div className="absolute bottom-0 left-0 size-32 bg-secondary/5 rounded-full -ml-16 -mb-16 group-hover:scale-110 transition-transform"></div>
 
                 <div className="flex flex-col items-center mb-10 relative z-10">
-                    <div className="size-24 rounded-3xl mb-6 flex items-center justify-center overflow-hidden">
-                        <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain" />
+                    <div className="size-32 rounded-3xl mb-4 flex items-center justify-center overflow-hidden">
+                        <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain scale-110" />
                     </div>
-                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+                    <div className="flex items-center gap-1 mb-6">
+                        <h1 className="text-primary text-3xl font-black italic tracking-tighter leading-none">PRO<span className="text-secondary">ATIVX</span></h1>
+                    </div>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
                         {isLogin ? 'Bem-vindo de volta!' : 'Crie sua conta'}
                     </h2>
-                    <p className="text-xs text-slate-400 font-black uppercase tracking-[0.2em]">
-                        {isLogin ? 'PROATIVX Business Suite' : 'Comece sua jornada hoje'}
-                    </p>
                 </div>
 
                 <form onSubmit={handleAuth} className="space-y-6 relative z-10">
