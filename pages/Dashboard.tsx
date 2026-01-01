@@ -1,19 +1,25 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useOrders, useDashboardStats } from '../hooks/useData';
+import { useOrders, useDashboardStats, useProfile } from '../hooks/useData';
 import { supabase } from '../supabaseClient';
 import { OrderStatus } from '../types';
 
 const Dashboard: React.FC = () => {
   const { orders, loading: loadingOrders } = useOrders();
   const { stats, loading: loadingStats } = useDashboardStats();
-  const [userName, setUserName] = React.useState('');
+  const [session, setSession] = React.useState<any>(null);
+  const { profile } = useProfile(session);
 
   React.useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUserName(user?.email?.split('@')[0] || 'Usuário');
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
     });
   }, []);
+
+  const userName = useMemo(() => {
+    if (profile?.full_name) return profile.full_name;
+    return session?.user?.email?.split('@')[0] || 'Usuário';
+  }, [profile, session]);
 
   const recentOrders = useMemo(() => orders.slice(0, 5), [orders]);
 
@@ -25,7 +31,7 @@ const Dashboard: React.FC = () => {
   };
 
   const dashboardCards = [
-    { label: 'Lucro Estimado', value: `R$ ${stats.totalProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, color: 'text-emerald-500', icon: 'payments', trend: '+12%', bg: 'bg-emerald-500/5' },
+    { label: 'Lucro Estimado', value: `R$ ${stats.totalProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} `, color: 'text-emerald-500', icon: 'payments', trend: '+12%', bg: 'bg-emerald-500/5' },
     { label: 'Pagamentos Pendentes', value: stats.pendingPayments.toString(), color: 'text-amber-500', icon: 'warning', trend: stats.pendingPayments > 0 ? 'Atenção' : 'OK', bg: 'bg-amber-500/5' },
     { label: 'Em Produção', value: stats.ordersInProduction.toString(), color: 'text-primary', icon: 'layers', trend: 'Ativos', bg: 'bg-primary/5' },
     { label: 'Novos Clientes', value: stats.newClients.toString(), color: 'text-purple-500', icon: 'group_add', trend: 'Base', bg: 'bg-purple-500/5' },
@@ -51,16 +57,16 @@ const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {dashboardCards.map((card, idx) => (
             <div key={idx} className="group bg-white dark:bg-[#16212e] p-7 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer relative overflow-hidden">
-              <div className={`absolute top-0 right-0 size-24 ${card.bg} rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform`}></div>
+              <div className={`absolute top - 0 right - 0 size - 24 ${card.bg} rounded - full - mr - 8 - mt - 8 group - hover: scale - 110 transition - transform`}></div>
               <div className="flex items-center gap-4 mb-4">
-                <div className={`size-10 rounded-2xl ${card.bg} ${card.color} flex items-center justify-center`}>
+                <div className={`size - 10 rounded - 2xl ${card.bg} ${card.color} flex items - center justify - center`}>
                   <span className="material-symbols-outlined">{card.icon}</span>
                 </div>
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{card.label}</span>
               </div>
               <div className="flex items-baseline justify-between">
-                <span className={`text-2xl font-black ${card.color}`}>{card.value}</span>
-                <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${card.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'}`}>
+                <span className={`text - 2xl font - black ${card.color} `}>{card.value}</span>
+                <span className={`text - [10px] font - black px - 2 py - 0.5 rounded - md ${card.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'} `}>
                   {card.trend}
                 </span>
               </div>
@@ -97,10 +103,10 @@ const Dashboard: React.FC = () => {
                           <span className="text-xs font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</span>
                           <span className="text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
                         </div>
-                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-[0.1em] border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                          order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
-                            'bg-slate-50 text-slate-400 border-slate-100'
-                          }`}>
+                        <span className={`px - 3 py - 1 rounded - lg text - [9px] font - black uppercase tracking - [0.1em] border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                            order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
+                              'bg-slate-50 text-slate-400 border-slate-100'
+                          } `}>
                           {order.status}
                         </span>
                       </div>

@@ -15,6 +15,7 @@ import SubscriptionPage from './pages/SubscriptionPage';
 import SubscriptionGuard from './components/SubscriptionGuard';
 import { supabase } from './supabaseClient';
 import { Session } from '@supabase/supabase-js';
+import { useProfile } from './hooks/useData';
 
 // Componentes Placeholder para novas páginas (para evitar arquivos vazios)
 const Placeholder = ({ title }: { title: string }) => (
@@ -27,7 +28,7 @@ const Placeholder = ({ title }: { title: string }) => (
   </div>
 );
 
-const Sidebar = ({ session, isOpen, onClose }: { session: Session | null, isOpen: boolean, onClose: () => void }) => {
+const Sidebar = ({ session, profile, isOpen, onClose }: { session: Session | null, profile: any, isOpen: boolean, onClose: () => void }) => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
 
@@ -122,7 +123,9 @@ const Sidebar = ({ session, isOpen, onClose }: { session: Session | null, isOpen
                 {session?.user?.email?.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col min-w-0">
-                <p className="text-slate-900 dark:text-white text-xs font-black truncate">{session?.user?.email?.split('@')[0]}</p>
+                <p className="text-slate-900 dark:text-white text-xs font-black truncate">
+                  {profile?.full_name || session?.user?.email?.split('@')[0]}
+                </p>
                 <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Admin</p>
               </div>
             </div>
@@ -162,7 +165,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const { profile } = useProfile(session);
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -187,7 +190,7 @@ const App: React.FC = () => {
   return (
     <HashRouter>
       <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
-        {session && <Sidebar session={session} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
+        {session && <Sidebar session={session} profile={profile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
         <main className="flex-1 flex flex-col min-w-0">
           {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} />}
           <div className="flex-1">

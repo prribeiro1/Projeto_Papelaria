@@ -109,6 +109,18 @@ const Settings: React.FC = () => {
 
             <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex justify-center">
                 <div className="w-full max-w-3xl space-y-8 lg:space-y-10">
+                    {/* Perfil Pessoal */}
+                    <section className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[48px] p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md">
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="size-10 lg:size-12 rounded-xl lg:rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                                <span className="material-symbols-outlined">person</span>
+                            </div>
+                            <h2 className="text-lg lg:text-xl font-black text-slate-800 dark:text-white">Seu Perfil</h2>
+                        </div>
+
+                        <ProfileSection />
+                    </section>
+
                     <section className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[48px] p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div className="flex items-center gap-4 mb-8 lg:mb-10">
                             <div className="size-10 lg:size-12 rounded-xl lg:rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
@@ -193,6 +205,76 @@ const Settings: React.FC = () => {
                 </div>
             </main>
         </div>
+    );
+};
+const ProfileSection: React.FC = () => {
+    const [session, setSession] = useState<any>(null);
+    const { profile, refresh } = React.useMemo(() => {
+        // We use a dummy hook call or just inline the logic to avoid complex state management
+        // but for simplicity, let's just use the profile directly if we had a global context.
+        // Since we don't, we'll fetch it locally.
+        return { profile: null as any, refresh: () => { } };
+    }, []);
+
+    const [fullName, setFullName] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [localProfile, setLocalProfile] = useState<any>(null);
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+            if (session?.user?.id) {
+                supabase.from('profiles').select('*').eq('id', session.user.id).single().then(({ data }) => {
+                    if (data) {
+                        setLocalProfile(data);
+                        setFullName(data.full_name || '');
+                    }
+                });
+            }
+        });
+    }, []);
+
+    const handleSaveProfile = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!session?.user?.id) return;
+
+        setSaving(true);
+        const { error } = await supabase
+            .from('profiles')
+            .update({ full_name: fullName })
+            .eq('id', session.user.id);
+
+        if (error) {
+            alert('Erro ao atualizar perfil: ' + error.message);
+        } else {
+            alert('Perfil atualizado com sucesso!');
+        }
+        setSaving(false);
+    };
+
+    return (
+        <form onSubmit={handleSaveProfile} className="space-y-6">
+            <div>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Como deseja ser chamado?</label>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <input
+                        required
+                        placeholder="Ex: Seu Nome ou Apelido"
+                        className="flex-1 h-14 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-amber-500/10 transition-all outline-none"
+                        value={fullName}
+                        onChange={e => setFullName(e.target.value)}
+                    />
+                    <button
+                        type="submit"
+                        disabled={saving}
+                        className="h-14 px-8 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs lg:text-sm uppercase tracking-widest shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"
+                    >
+                        {saving ? 'SALVANDO...' : 'ATUALIZAR NOME'}
+                    </button>
+                </div>
+                <p className="text-[10px] text-slate-400 mt-3 ml-1">Esse nome será exibido na tela inicial e nas notificações do sistema.</p>
+            </div>
+        </form>
     );
 };
 
