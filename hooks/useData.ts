@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
-import { Client, Order, Transaction, Quote, CompanySettings } from '../types';
+import { Client, Order, Transaction, Quote, CompanySettings, Product } from '../types';
 
 export function useClients() {
     const [clients, setClients] = useState<Client[]>([]);
@@ -115,6 +115,31 @@ export function useQuotes() {
     }, []);
 
     return { quotes, loading, refresh: fetchQuotes };
+}
+
+export function useProducts() {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    async function fetchProducts() {
+        setLoading(true);
+        const { data, error } = await supabase
+            .from('products')
+            .select('*')
+            .order('name', { ascending: true });
+
+        if (error) console.error('Error fetching products:', error);
+        else {
+            setProducts(data || []);
+        }
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    return { products, loading, refresh: fetchProducts };
 }
 
 export function useCompanySettings() {
@@ -239,4 +264,37 @@ export function useDashboardStats() {
     }, []);
 
     return { stats, loading, refresh: fetchStats };
+}
+
+export async function exportAllData() {
+    const tables = ['clients', 'orders', 'quotes', 'products', 'transactions', 'company_settings'];
+    const backup: any = {};
+
+    for (const table of tables) {
+        const { data, error } = await supabase.from(table).select('*');
+        if (error) {
+            console.error(`Error exporting ${table}:`, error);
+            backup[table] = [];
+        } else {
+            backup[table] = data;
+        }
+    }
+
+    return backup;
+}
+
+export async function importAllData(data: any) {
+    // This is a destructive operation or append? User said "import if necessary".
+    // We will attempt to insert records. Since IDs might conflict, we'll use upsert.
+    const tables = ['clients', 'products', 'company_settings', 'orders', 'quotes', 'transactions'];
+
+    for (const table of tables) {
+        if (data[table] && Array.isArray(data[table])) {
+            const { error } = await supabase.from(table).upsert(data[table]);
+            if (error) {
+                console.error(`Error importing ${table}:`, error);
+                throw error;
+            }
+        }
+    }
 }

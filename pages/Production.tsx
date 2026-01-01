@@ -68,7 +68,7 @@ const Production: React.FC = () => {
   const monthName = currentDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-slate-50 dark:bg-[#0f172a]">
+    <div className="flex flex-col min-h-full bg-slate-50 dark:bg-[#0f172a]">
       {/* Header */}
       <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-5 flex items-center justify-between">
         <div className="flex flex-col">
@@ -84,7 +84,7 @@ const Production: React.FC = () => {
         </button>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-8">
+      <main className="p-8 flex flex-col gap-8">
         {/* Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#fff9e6] dark:bg-amber-900/10 p-6 rounded-3xl border border-amber-100 dark:border-amber-900/20 flex flex-col items-center">
@@ -167,9 +167,9 @@ const Production: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="flex h-full gap-6 overflow-x-auto pb-4 custom-scrollbar">
+          <div className="flex gap-6 overflow-x-auto pb-4 custom-scrollbar">
             {stages.map((stage) => (
-              <div key={stage} className="flex flex-col w-80 min-w-[320px] h-full flex-shrink-0">
+              <div key={stage} className="flex flex-col w-80 min-w-[320px] flex-shrink-0">
                 <div className="flex items-center justify-between mb-4 px-2">
                   <div className="flex items-center gap-3">
                     <div className={`size-3 rounded-full ${stage === OrderStatus.PENDING ? 'bg-slate-400 shadow-[0_0_8px_rgba(148,163,184,0.5)]' :
@@ -183,7 +183,7 @@ const Production: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto flex flex-col gap-4 pr-2 custom-scrollbar">
+                <div className="flex flex-col gap-4 pr-2">
                   {orders.filter(o => o.status === stage).map((order) => (
                     <div key={order.id} className="bg-white dark:bg-[#16212e] p-5 rounded-3xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all group cursor-pointer">
                       <div className="flex justify-between items-start mb-3">

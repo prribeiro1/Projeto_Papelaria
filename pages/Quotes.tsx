@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useQuotes, useClients, useCompanySettings } from '../hooks/useData';
+import { useQuotes, useClients, useCompanySettings, useProducts } from '../hooks/useData';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Quote } from '../types';
@@ -11,6 +11,7 @@ const Quotes: React.FC = () => {
     const { quotes, loading, refresh } = useQuotes();
     const { clients } = useClients();
     const { settings } = useCompanySettings();
+    const { products } = useProducts();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -332,7 +333,27 @@ const Quotes: React.FC = () => {
                                 <div className="space-y-3">
                                     {newQuote.items.map((item, idx) => (
                                         <div key={idx} className="flex gap-3">
-                                            <input placeholder="Descrição..." className="flex-1 h-10 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs" value={item.description} onChange={e => updateItem(idx, 'description', e.target.value)} />
+                                            <div className="flex-1 flex gap-2">
+                                                <input
+                                                    list={`products-list-quote-${idx}`}
+                                                    placeholder="Descrição..."
+                                                    className="flex-1 h-10 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs"
+                                                    value={item.description}
+                                                    onChange={e => {
+                                                        const val = e.target.value;
+                                                        const prod = products.find(p => p.name === val);
+                                                        if (prod) {
+                                                            updateItem(idx, 'description', prod.name);
+                                                            updateItem(idx, 'unitValue', Number(prod.price));
+                                                        } else {
+                                                            updateItem(idx, 'description', val);
+                                                        }
+                                                    }}
+                                                />
+                                                <datalist id={`products-list-quote-${idx}`}>
+                                                    {products.map(p => <option key={p.id} value={p.name}>{p.category} - R$ {Number(p.price).toFixed(2)}</option>)}
+                                                </datalist>
+                                            </div>
                                             <input type="number" className="w-16 h-10 px-2 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs text-center font-black" value={item.quantity} onChange={e => updateItem(idx, 'quantity', Number(e.target.value))} />
                                             <input type="number" step="0.01" className="w-24 h-10 px-2 rounded-xl bg-slate-50 dark:bg-slate-800 border-none text-xs text-right font-black" value={item.unitValue} onChange={e => updateItem(idx, 'unitValue', Number(e.target.value))} />
                                             <button type="button" onClick={() => removeItem(idx)} className="text-slate-300 hover:text-red-500">

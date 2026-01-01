@@ -9,6 +9,8 @@ import Despesas from './pages/Despesas';
 import Auth from './pages/Auth';
 import Quotes from './pages/Quotes';
 import Settings from './pages/Settings';
+import Products from './pages/Products';
+import Backup from './pages/Backup';
 import { supabase } from './supabaseClient';
 import { Session } from '@supabase/supabase-js';
 
@@ -46,7 +48,6 @@ const Sidebar = ({ session }: { session: Session | null }) => {
       items: [
         { path: '/financeiro', label: 'Financeiro', icon: 'account_balance_wallet' },
         { path: '/despesas', label: 'Despesas', icon: 'trending_down' },
-        { path: '/pro-labore', label: 'Pró-labore', icon: 'payments' },
       ]
     },
     {
@@ -61,15 +62,15 @@ const Sidebar = ({ session }: { session: Session | null }) => {
   ];
 
   return (
-    <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 h-full flex-none overflow-hidden">
+    <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 h-full flex-none">
       <div className="p-8 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-4">
-          <div className="bg-gradient-to-br from-primary to-blue-600 rounded-2xl p-2 flex items-center justify-center size-10 text-white shadow-xl shadow-primary/20">
-            <span className="material-symbols-outlined font-black text-2xl">print</span>
+          <div className="bg-slate-900 dark:bg-black rounded-2xl p-2 flex items-center justify-center size-10 text-white shadow-xl shadow-slate-900/10">
+            <span className="material-symbols-outlined font-black text-2xl">rocket_launch</span>
           </div>
           <div>
-            <h1 className="text-slate-900 dark:text-white text-xl font-black tracking-tight leading-none">PAPELARIA<span className="text-primary">SYS</span></h1>
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Business Suite</span>
+            <h1 className="text-slate-900 dark:text-white text-xl font-black tracking-tight leading-none">PRO<span className="text-primary">ATIVX</span></h1>
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Business Intelligence</span>
           </div>
         </div>
       </div>
@@ -156,9 +157,9 @@ const App: React.FC = () => {
 
   return (
     <HashRouter>
-      <div className="flex h-screen w-full bg-background-light dark:bg-background-dark">
+      <div className="flex min-h-screen w-full bg-background-light dark:bg-background-dark">
         {session && <Sidebar session={session} />}
-        <main className="flex-1 flex flex-col h-full overflow-hidden">
+        <main className="flex-1 flex flex-col">
           <Routes>
             <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/" />} />
             <Route path="/" element={session ? <Dashboard /> : <Navigate to="/auth" />} />
@@ -168,9 +169,8 @@ const App: React.FC = () => {
             <Route path="/orcamentos" element={session ? <Quotes /> : <Navigate to="/auth" />} />
             <Route path="/financeiro" element={session ? <Financeiro /> : <Navigate to="/auth" />} />
             <Route path="/despesas" element={session ? <Despesas /> : <Navigate to="/auth" />} />
-            <Route path="/pro-labore" element={session ? <Placeholder title="Pró-labore" /> : <Navigate to="/auth" />} />
-            <Route path="/produtos" element={session ? <Placeholder title="Produtos" /> : <Navigate to="/auth" />} />
-            <Route path="/backup" element={session ? <Placeholder title="Backup" /> : <Navigate to="/auth" />} />
+            <Route path="/produtos" element={session ? <Products /> : <Navigate to="/auth" />} />
+            <Route path="/backup" element={session ? <Backup /> : <Navigate to="/auth" />} />
             <Route path="/configuracao" element={session ? <Settings /> : <Navigate to="/auth" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
