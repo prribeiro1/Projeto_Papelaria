@@ -51,19 +51,19 @@ const Clients: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
       {/* Header */}
-      <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-8">
+      <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 lg:py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3 text-emerald-500">
-              <span className="material-symbols-outlined font-black text-3xl">group</span>
-              <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Base de Clientes</h1>
+            <div className="flex items-center gap-2 lg:gap-3 text-emerald-500">
+              <span className="material-symbols-outlined font-black text-2xl lg:text-3xl">group</span>
+              <h1 className="text-xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Base de Clientes</h1>
             </div>
-            <p className="text-sm text-slate-500 font-medium">Gerencie o relacionamento e histórico de seus clientes</p>
+            <p className="text-xs lg:text-sm text-slate-500 font-medium">Gerencie o relacionamento e histórico de seus clientes</p>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
+              className="w-full md:w-auto flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 lg:py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
             >
               <span className="material-symbols-outlined font-black">person_add</span>
               <span>Novo Cliente</span>
@@ -73,7 +73,7 @@ const Clients: React.FC = () => {
       </header>
 
       {/* List & Search */}
-      <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-8">
+      <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex flex-col gap-6 lg:gap-8">
         <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
           <div className="relative w-full md:max-w-xl">
             <span className="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>

@@ -50,20 +50,20 @@ const Backup: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark">
-            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6">
+            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6">
                 <div className="flex flex-col">
-                    <div className="flex items-center gap-2 text-primary">
-                        <span className="material-symbols-outlined font-bold">cloud_sync</span>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Backup e Restauração</h2>
+                    <div className="flex items-center gap-2 lg:gap-3 text-primary">
+                        <span className="material-symbols-outlined font-bold text-xl lg:text-2xl">cloud_sync</span>
+                        <h2 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Backup e Restauração</h2>
                     </div>
-                    <p className="text-sm text-slate-500 font-medium">Proteja seus dados e mova seus registros</p>
+                    <p className="text-xs lg:text-sm text-slate-500 font-medium">Proteja seus dados e mova seus registros</p>
                 </div>
             </header>
 
-            <main className="flex-1 p-8 flex flex-col gap-8 max-w-4xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <main className="flex-1 p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 max-w-4xl mx-auto w-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                     {/* Export Section */}
-                    <div className="bg-white dark:bg-[#16212e] p-8 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center text-center gap-6">
+                    <div className="bg-white dark:bg-[#16212e] p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center text-center gap-6">
                         <div className="size-20 rounded-3xl bg-primary/10 text-primary flex items-center justify-center">
                             <span className="material-symbols-outlined text-4xl">download_for_offline</span>
                         </div>
@@ -81,7 +81,7 @@ const Backup: React.FC = () => {
                     </div>
 
                     {/* Import Section */}
-                    <div className="bg-white dark:bg-[#16212e] p-8 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center text-center gap-6">
+                    <div className="bg-white dark:bg-[#16212e] p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center text-center gap-6">
                         <div className="size-20 rounded-3xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                             <span className="material-symbols-outlined text-4xl">upload_file</span>
                         </div>
@@ -116,7 +116,7 @@ const Backup: React.FC = () => {
                     </div>
                 )}
 
-                <div className="bg-amber-50 dark:bg-amber-900/10 p-8 rounded-[40px] border border-amber-100 dark:border-amber-900/20 flex gap-6 mt-4">
+                <div className="bg-amber-50 dark:bg-amber-900/10 p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-amber-100 dark:border-amber-900/20 flex flex-col sm:flex-row gap-6 mt-4">
                     <span className="material-symbols-outlined text-amber-500 text-3xl">info</span>
                     <div className="flex flex-col gap-1">
                         <h4 className="text-sm font-black text-amber-600 uppercase tracking-wider">Segurança dos Dados</h4>

@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
-      <header className="flex-shrink-0 px-10 py-10">
+      <header className="flex-shrink-0 px-6 lg:px-10 py-6 lg:py-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-10 pb-10 flex flex-col gap-10">
+      <main className="flex-1 overflow-y-auto px-6 lg:px-10 pb-10 flex flex-col gap-8 lg:gap-10">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {dashboardCards.map((card, idx) => (
@@ -69,14 +69,14 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Main Content Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
           {/* Recent Orders List */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-black text-slate-800 dark:text-white">Pedidos Recentes</h3>
               <button className="text-xs font-black text-primary hover:underline">VER TODOS</button>
             </div>
-            <div className="bg-white dark:bg-[#16212e] rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
+            <div className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
               {loadingOrders ? (
                 <div className="p-20 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
               ) : (
@@ -118,30 +118,30 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Quick Actions & Tips */}
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-8 lg:gap-10">
             <div className="flex flex-col gap-6">
               <h3 className="text-xl font-black text-slate-800 dark:text-white">Atalhos Rápidos</h3>
               <div className="grid grid-cols-2 gap-4">
-                <Link to="/pedidos?new=true" className="bg-primary p-6 rounded-[32px] text-white shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
-                  <span className="material-symbols-outlined text-3xl">add_circle</span>
-                  <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Pedido</span>
+                <Link to="/pedidos?new=true" className="bg-primary p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] text-white shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-3 lg:gap-4">
+                  <span className="material-symbols-outlined text-2xl lg:text-3xl">add_circle</span>
+                  <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider leading-none">Novo<br />Pedido</span>
                 </Link>
-                <Link to="/clientes?new=true" className="bg-emerald-500 p-6 rounded-[32px] text-white shadow-xl shadow-emerald-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
-                  <span className="material-symbols-outlined text-3xl">person_add</span>
-                  <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Cliente</span>
+                <Link to="/clientes?new=true" className="bg-emerald-500 p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] text-white shadow-xl shadow-emerald-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-3 lg:gap-4">
+                  <span className="material-symbols-outlined text-2xl lg:text-3xl">person_add</span>
+                  <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider leading-none">Novo<br />Cliente</span>
                 </Link>
-                <Link to="/orcamentos?new=true" className="bg-amber-500 p-6 rounded-[32px] text-white shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
-                  <span className="material-symbols-outlined text-3xl">receipt_long</span>
-                  <span className="text-xs font-black uppercase tracking-wider leading-none">Novo<br />Orçamento</span>
+                <Link to="/orcamentos?new=true" className="bg-amber-500 p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] text-white shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-3 lg:gap-4">
+                  <span className="material-symbols-outlined text-2xl lg:text-3xl">receipt_long</span>
+                  <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider leading-none">Novo<br />Orçamento</span>
                 </Link>
-                <Link to="/financeiro" className="bg-slate-800 p-6 rounded-[32px] text-white shadow-xl shadow-slate-800/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-4">
-                  <span className="material-symbols-outlined text-3xl">print</span>
-                  <span className="text-xs font-black uppercase tracking-wider leading-none">Imprimir<br />Relatórios</span>
+                <Link to="/financeiro" className="bg-slate-800 p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] text-white shadow-xl shadow-slate-800/20 hover:scale-[1.02] transition-transform cursor-pointer flex flex-col gap-3 lg:gap-4">
+                  <span className="material-symbols-outlined text-2xl lg:text-3xl">print</span>
+                  <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider leading-none">Imprimir<br />Relatórios</span>
                 </Link>
               </div>
             </div>
 
-            <div className="bg-slate-900 rounded-[40px] p-8 text-white relative overflow-hidden group">
+            <div className="bg-slate-900 rounded-[32px] lg:rounded-[40px] p-6 lg:p-8 text-white relative overflow-hidden group">
               <div className="absolute top-0 right-0 size-40 bg-primary/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform"></div>
               <h4 className="text-lg font-black mb-2 relative z-10">Dica do PapelariaSys</h4>
               <p className="text-sm text-slate-400 font-medium relative z-10 leading-relaxed mb-6">Mantenha seus prazos atualizados na aba de Produção para receber alertas automáticos.</p>

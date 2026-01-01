@@ -89,38 +89,38 @@ const Products: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark">
-            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6 flex items-center justify-between">
+            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex flex-col">
-                    <div className="flex items-center gap-2 text-primary">
-                        <span className="material-symbols-outlined font-bold">inventory_2</span>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Produtos</h2>
+                    <div className="flex items-center gap-2 lg:gap-3 text-primary">
+                        <span className="material-symbols-outlined font-bold text-xl lg:text-2xl">inventory_2</span>
+                        <h2 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Produtos</h2>
                     </div>
-                    <p className="text-sm text-slate-500 font-medium">Gerencie seu catálogo de produtos e preços</p>
+                    <p className="text-xs lg:text-sm text-slate-500 font-medium">Gerencie seu catálogo de produtos e preços</p>
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
-                    className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2"
+                    className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-6 py-3 lg:py-4 rounded-2xl font-black text-xs lg:text-sm shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
                 >
                     <span className="material-symbols-outlined">add</span>
                     CADASTRAR PRODUTO
                 </button>
             </header>
 
-            <main className="flex-1 p-8 flex flex-col gap-6">
-                <div className="bg-white dark:bg-[#16212e] p-4 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div className="relative max-w-md">
+            <main className="flex-1 p-6 lg:p-8 flex flex-col gap-6">
+                <div className="bg-white dark:bg-[#16212e] p-4 rounded-[28px] lg:rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div className="relative w-full md:max-w-md">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
                         <input
                             type="text"
                             placeholder="Buscar produtos..."
-                            className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-none rounded-2xl text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                            className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-none rounded-xl lg:rounded-2xl text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                         />
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-[#16212e] rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div className="bg-white dark:bg-[#16212e] rounded-[28px] lg:rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                     {loading ? (
                         <div className="p-20 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div></div>
                     ) : (

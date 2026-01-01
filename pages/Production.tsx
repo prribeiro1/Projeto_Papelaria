@@ -70,21 +70,21 @@ const Production: React.FC = () => {
   return (
     <div className="flex flex-col min-h-full bg-background-light dark:bg-background-dark">
       {/* Header */}
-      <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-5 flex items-center justify-between">
+      <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-5 flex items-center justify-between">
         <div className="flex flex-col">
           <div className="flex items-center gap-2 text-primary">
-            <span className="material-symbols-outlined font-bold">calendar_month</span>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Produção</h2>
+            <span className="material-symbols-outlined font-bold text-xl lg:text-2xl">calendar_month</span>
+            <h2 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Produção</h2>
           </div>
-          <p className="text-sm text-slate-500 font-medium">Gerencie a produção dos pedidos</p>
+          <p className="text-xs lg:text-sm text-slate-500 font-medium">Gerencie a produção dos pedidos</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary text-primary font-bold text-sm hover:bg-primary/5 transition-all">
-          <span className="material-symbols-outlined text-[20px]">print</span>
-          <span>Imprimir</span>
+        <button className="flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl border border-primary text-primary font-bold text-xs lg:text-sm hover:bg-primary/5 transition-all">
+          <span className="material-symbols-outlined text-[18px] lg:text-[20px]">print</span>
+          <span className="hidden sm:inline">Imprimir</span>
         </button>
       </header>
 
-      <main className="p-8 flex flex-col gap-8">
+      <main className="p-6 lg:p-8 flex flex-col gap-6 lg:gap-8">
         {/* Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#fff9e6] dark:bg-amber-900/10 p-6 rounded-3xl border border-amber-100 dark:border-amber-900/20 flex flex-col items-center">
@@ -128,42 +128,44 @@ const Production: React.FC = () => {
           </div>
         ) : view === 'calendar' ? (
           <div className="bg-white dark:bg-[#16212e] rounded-[32px] border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between mb-8 px-2">
-              <h3 className="text-xl font-black text-slate-800 dark:text-white capitalize">{monthName}</h3>
+            <div className="flex items-center justify-between mb-6 lg:mb-8 px-2">
+              <h3 className="text-lg lg:text-xl font-black text-slate-800 dark:text-white capitalize">{monthName}</h3>
               <div className="flex items-center gap-2">
-                <button onClick={() => changeMonth(-1)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500">
-                  <span className="material-symbols-outlined">chevron_left</span>
+                <button onClick={() => changeMonth(-1)} className="p-1.5 lg:p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500">
+                  <span className="material-symbols-outlined text-xl">chevron_left</span>
                 </button>
-                <button onClick={() => setCurrentDate(new Date())} className="px-4 py-1 text-xs font-bold text-primary hover:bg-primary/10 rounded-lg">Hoje</button>
-                <button onClick={() => changeMonth(1)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500">
-                  <span className="material-symbols-outlined">chevron_right</span>
+                <button onClick={() => setCurrentDate(new Date())} className="px-3 lg:px-4 py-1 text-[10px] lg:text-xs font-black text-primary hover:bg-primary/10 rounded-lg uppercase">Hoje</button>
+                <button onClick={() => changeMonth(1)} className="p-1.5 lg:p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500">
+                  <span className="material-symbols-outlined text-xl">chevron_right</span>
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-px bg-slate-100 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden">
-              {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
-                <div key={day} className="bg-slate-50 dark:bg-slate-800/50 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">{day}</div>
-              ))}
-              {calendarData.map((item, idx) => (
-                <div key={idx} className={`min-h-[120px] bg-white dark:bg-[#16212e] p-2 flex flex-col gap-1 ${!item.day ? 'bg-slate-50/50 dark:bg-slate-900/50' : ''}`}>
-                  {item.day && (
-                    <span className={`text-xs font-bold mb-1 ml-1 ${item.day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth()
-                      ? 'bg-primary text-white size-6 rounded-lg flex items-center justify-center'
-                      : 'text-slate-400'
-                      }`}>
-                      {item.day}
-                    </span>
-                  )}
-                  <div className="flex flex-col gap-1 overflow-y-auto max-h-[80px] custom-scrollbar">
-                    {item.orders.map(order => (
-                      <div key={order.id} className="text-[10px] px-2 py-1 rounded bg-primary/5 text-primary border border-primary/10 font-bold truncate" title={order.productName}>
-                        {order.productName}
-                      </div>
-                    ))}
+            <div className="overflow-x-auto">
+              <div className="min-w-[700px] grid grid-cols-7 gap-px bg-slate-100 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden">
+                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+                  <div key={day} className="bg-slate-50 dark:bg-slate-800/50 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">{day}</div>
+                ))}
+                {calendarData.map((item, idx) => (
+                  <div key={idx} className={`min-h-[120px] bg-white dark:bg-[#16212e] p-2 flex flex-col gap-1 ${!item.day ? 'bg-slate-50/50 dark:bg-slate-900/50' : ''}`}>
+                    {item.day && (
+                      <span className={`text-xs font-bold mb-1 ml-1 ${item.day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth()
+                        ? 'bg-primary text-white size-6 rounded-lg flex items-center justify-center'
+                        : 'text-slate-400'
+                        }`}>
+                        {item.day}
+                      </span>
+                    )}
+                    <div className="flex flex-col gap-1 overflow-y-auto max-h-[80px] custom-scrollbar">
+                      {item.orders.map(order => (
+                        <div key={order.id} className="text-[10px] px-2 py-1 rounded bg-primary/5 text-primary border border-primary/10 font-bold truncate" title={order.productName}>
+                          {order.productName}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         ) : (

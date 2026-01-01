@@ -32,20 +32,20 @@ export default function Auth() {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-background-light dark:bg-background-dark p-6 font-sans">
-            <div className="bg-white dark:bg-[#16212e] p-12 rounded-[48px] w-full max-w-md shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
+        <div className="min-h-screen w-full flex items-center justify-center bg-background-light dark:bg-background-dark p-4 lg:p-6 font-sans">
+            <div className="bg-white dark:bg-[#16212e] p-8 lg:p-12 rounded-[32px] lg:rounded-[48px] w-full max-w-md shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
                 {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 size-40 bg-primary/5 rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform"></div>
-                <div className="absolute bottom-0 left-0 size-32 bg-secondary/5 rounded-full -ml-16 -mb-16 group-hover:scale-110 transition-transform"></div>
+                <div className="absolute top-0 right-0 size-32 lg:size-40 bg-primary/5 rounded-full -mr-16 lg:-mr-20 -mt-16 lg:-mt-20 group-hover:scale-110 transition-transform"></div>
+                <div className="absolute bottom-0 left-0 size-24 lg:size-32 bg-secondary/5 rounded-full -ml-12 lg:-ml-16 -mb-12 lg:-mb-16 group-hover:scale-110 transition-transform"></div>
 
-                <div className="flex flex-col items-center mb-10 relative z-10">
-                    <div className="size-32 rounded-3xl mb-4 flex items-center justify-center overflow-hidden">
+                <div className="flex flex-col items-center mb-8 lg:mb-10 relative z-10">
+                    <div className="size-24 lg:size-32 rounded-3xl mb-4 flex items-center justify-center overflow-hidden">
                         <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain scale-110" />
                     </div>
-                    <div className="flex items-center gap-1 mb-6">
-                        <h1 className="text-primary text-3xl font-black italic tracking-tighter leading-none">PRO<span className="text-secondary">ATIVX</span></h1>
+                    <div className="flex items-center gap-1 mb-4 lg:mb-6">
+                        <h1 className="text-primary text-2xl lg:text-3xl font-black italic tracking-tighter leading-none">PRO<span className="text-secondary">ATIVX</span></h1>
                     </div>
-                    <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                    <h2 className="text-lg lg:text-xl font-black text-slate-900 dark:text-white tracking-tight">
                         {isLogin ? 'Bem-vindo de volta!' : 'Crie sua conta'}
                     </h2>
                 </div>

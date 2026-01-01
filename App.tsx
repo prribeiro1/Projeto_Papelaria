@@ -27,7 +27,7 @@ const Placeholder = ({ title }: { title: string }) => (
   </div>
 );
 
-const Sidebar = ({ session }: { session: Session | null }) => {
+const Sidebar = ({ session, isOpen, onClose }: { session: Session | null, isOpen: boolean, onClose: () => void }) => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
 
@@ -64,76 +64,104 @@ const Sidebar = ({ session }: { session: Session | null }) => {
   ];
 
   return (
-    <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 h-full flex-none">
-      <div className="p-8 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center gap-2">
-          <div className="size-20 rounded-2xl flex items-center justify-center overflow-hidden">
-            <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain scale-110" />
-          </div>
-          <div>
-            <h1 className="text-primary text-2xl font-black tracking-tighter leading-none italic">PRO<span className="text-secondary">ATIVX</span></h1>
+    <>
+      {/* Mobile Overlay */}
+      <div
+        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 transition-opacity lg:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        onClick={onClose}
+      />
+
+      <div className={`fixed inset-y-0 left-0 w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 z-50 transform transition-transform duration-300 lg:relative lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col h-full flex-none`}>
+        <div className="p-8 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="size-20 rounded-2xl flex items-center justify-center overflow-hidden">
+              <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain scale-110" />
+            </div>
+            <div>
+              <h1 className="text-primary text-2xl font-black tracking-tighter leading-none italic">PRO<span className="text-secondary">ATIVX</span></h1>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-8 px-6 py-8 grow overflow-y-auto custom-scrollbar">
-        {menuSections.map((section, idx) => (
-          <div key={idx} className="flex flex-col gap-2">
-            <h3 className="px-4 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2">{section.title}</h3>
-            {section.items.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group ${isActive(item.path)
-                  ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                  : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-              >
-                <span className={`material-symbols-outlined text-[24px] ${isActive(item.path) ? 'icon-filled' : 'opacity-70 group-hover:opacity-100 transition-opacity'}`}>
-                  {item.icon}
-                </span>
-                <span className={`text-sm ${isActive(item.path) ? 'font-black' : 'font-bold'}`}>
-                  {item.label}
-                </span>
-                {(item as any).badge && (
-                  <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-lg ${isActive(item.path) ? 'bg-white/20 text-white' : 'bg-red-500 text-white shadow-lg shadow-red-500/20'
-                    }`}>
-                    {(item as any).badge}
+        <div className="flex flex-col gap-8 px-6 py-8 grow overflow-y-auto custom-scrollbar">
+          {menuSections.map((section, idx) => (
+            <div key={idx} className="flex flex-col gap-2">
+              <h3 className="px-4 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2">{section.title}</h3>
+              {section.items.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => { if (window.innerWidth < 1024) onClose(); }}
+                  className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group ${isActive(item.path)
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                >
+                  <span className={`material-symbols-outlined text-[24px] ${isActive(item.path) ? 'icon-filled' : 'opacity-70 group-hover:opacity-100 transition-opacity'}`}>
+                    {item.icon}
                   </span>
-                )}
-              </Link>
-            ))}
-          </div>
-        ))}
-      </div>
+                  <span className={`text-sm ${isActive(item.path) ? 'font-black' : 'font-bold'}`}>
+                    {item.label}
+                  </span>
+                  {(item as any).badge && (
+                    <span className={`ml-auto text-[10px] font-black px-2 py-0.5 rounded-lg ${isActive(item.path) ? 'bg-white/20 text-white' : 'bg-red-500 text-white shadow-lg shadow-red-500/20'
+                      }`}>
+                      {(item as any).badge}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
 
-      <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
-        <div className="bg-white dark:bg-[#16212e] rounded-3xl p-3 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="size-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-xs border border-primary/10">
-              {session?.user?.email?.charAt(0).toUpperCase()}
+        <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+          <div className="bg-white dark:bg-[#16212e] rounded-3xl p-3 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="size-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-xs border border-primary/10">
+                {session?.user?.email?.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex flex-col min-w-0">
+                <p className="text-slate-900 dark:text-white text-xs font-black truncate">{session?.user?.email?.split('@')[0]}</p>
+                <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Admin</p>
+              </div>
             </div>
-            <div className="flex flex-col min-w-0">
-              <p className="text-slate-900 dark:text-white text-xs font-black truncate">{session?.user?.email?.split('@')[0]}</p>
-              <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Admin</p>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
+              title="Sair"
+            >
+              <span className="material-symbols-outlined text-xl">logout</span>
+            </button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
-            title="Sair"
-          >
-            <span className="material-symbols-outlined text-xl">logout</span>
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
+
+const MobileHeader = ({ onOpen, session }: { onOpen: () => void, session: Session | null }) => (
+  <div className="lg:hidden h-16 bg-white dark:bg-[#111a27] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-30">
+    <div className="flex items-center gap-3">
+      <div className="size-8 rounded-lg flex items-center justify-center overflow-hidden">
+        <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+      </div>
+      <h1 className="text-primary text-lg font-black tracking-tighter italic">PRO<span className="text-secondary">ATIVX</span></h1>
+    </div>
+    <button
+      onClick={onOpen}
+      className="size-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500"
+    >
+      <span className="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+);
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -158,60 +186,64 @@ const App: React.FC = () => {
 
   return (
     <HashRouter>
-      <div className="flex min-h-screen w-full bg-background-light dark:bg-background-dark">
-        {session && <Sidebar session={session} />}
-        <main className="flex-1 flex flex-col">
-          <Routes>
-            <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/" />} />
-            <Route path="/" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Dashboard />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/pedidos" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Orders />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/producao" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Production />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/clientes" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Clients />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/orcamentos" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Quotes />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/financeiro" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Financeiro />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/despesas" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Despesas />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/produtos" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Products />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/backup" element={session ? (
-              <SubscriptionGuard session={session}>
-                <Backup />
-              </SubscriptionGuard>
-            ) : <Navigate to="/auth" />} />
-            <Route path="/configuracao" element={session ? <Settings /> : <Navigate to="/auth" />} />
-            <Route path="/assinatura" element={session ? <SubscriptionPage /> : <Navigate to="/auth" />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
+      <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
+        {session && <Sidebar session={session} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
+        <main className="flex-1 flex flex-col min-w-0">
+          {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} />}
+          <div className="flex-1">
+            <Routes>
+              {/* ... same routes ... */}
+              <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/" />} />
+              <Route path="/" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Dashboard />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/pedidos" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Orders />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/producao" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Production />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/clientes" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Clients />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/orcamentos" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Quotes />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/financeiro" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Financeiro />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/despesas" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Despesas />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/produtos" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Products />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/backup" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Backup />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/configuracao" element={session ? <Settings /> : <Navigate to="/auth" />} />
+              <Route path="/assinatura" element={session ? <SubscriptionPage /> : <Navigate to="/auth" />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
         </main>
       </div>
     </HashRouter>

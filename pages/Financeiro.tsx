@@ -50,21 +50,21 @@ const Financeiro: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
-            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6 flex items-center justify-between">
+            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 lg:py-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2 text-primary">
-                        <span className="material-symbols-outlined font-bold">account_balance_wallet</span>
-                        <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Financeiro</h1>
+                        <span className="material-symbols-outlined font-bold text-xl lg:text-2xl">account_balance_wallet</span>
+                        <h1 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Financeiro</h1>
                     </div>
-                    <p className="text-sm text-slate-500 font-medium">Controle de caixa, entradas e saídas</p>
+                    <p className="text-xs lg:text-sm text-slate-500 font-medium">Controle de caixa, entradas e saídas</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 w-full md:w-auto">
                     <button
                         onClick={() => {
                             setNewTransaction({ ...newTransaction, type: 'Entrada', category: 'Vendas' });
                             setIsModalOpen(true);
                         }}
-                        className="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-black uppercase tracking-widest border border-emerald-100 hover:bg-emerald-100 transition-all flex items-center gap-2"
+                        className="flex-1 md:flex-none px-4 py-3 rounded-xl bg-emerald-50 text-emerald-600 text-[10px] lg:text-xs font-black uppercase tracking-widest border border-emerald-100 hover:bg-emerald-100 transition-all flex items-center justify-center gap-2"
                     >
                         <span className="material-symbols-outlined text-sm">add</span> Nova Entrada
                     </button>
@@ -73,14 +73,14 @@ const Financeiro: React.FC = () => {
                             setNewTransaction({ ...newTransaction, type: 'Saída', category: 'Insumos' });
                             setIsModalOpen(true);
                         }}
-                        className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-xs font-black uppercase tracking-widest border border-rose-100 hover:bg-rose-100 transition-all flex items-center gap-2"
+                        className="flex-1 md:flex-none px-4 py-3 rounded-xl bg-rose-50 text-rose-600 text-[10px] lg:text-xs font-black uppercase tracking-widest border border-rose-100 hover:bg-rose-100 transition-all flex items-center justify-center gap-2"
                     >
                         <span className="material-symbols-outlined text-sm">remove</span> Nova Saída
                     </button>
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-8">
+            <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex flex-col gap-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {paymentMethods.map((method, idx) => (
                         <div key={idx} className="bg-white dark:bg-[#16212e] p-6 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -148,8 +148,8 @@ const Financeiro: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-[#16212e] rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
-                    <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
+                    <div className="p-6 lg:p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <h3 className="text-lg font-black text-slate-800 dark:text-white">Últimas Transações</h3>
                         <button className="text-xs font-black text-primary hover:underline">Ver TUDO</button>
                     </div>

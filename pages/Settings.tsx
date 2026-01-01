@@ -97,24 +97,24 @@ const Settings: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
-            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-8">
+            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 lg:py-8">
                 <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-3 text-primary">
-                        <span className="material-symbols-outlined font-black text-3xl">settings</span>
-                        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Configurações</h1>
+                    <div className="flex items-center gap-2 lg:gap-3 text-primary">
+                        <span className="material-symbols-outlined font-black text-2xl lg:text-3xl">settings</span>
+                        <h1 className="text-xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Configurações</h1>
                     </div>
-                    <p className="text-sm text-slate-500 font-medium">Personalize a identidade da sua empresa e documentos</p>
+                    <p className="text-xs lg:text-sm text-slate-500 font-medium">Personalize a identidade da sua empresa e documentos</p>
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-8 flex justify-center">
-                <div className="w-full max-w-3xl space-y-10">
-                    <section className="bg-white dark:bg-[#16212e] rounded-[48px] p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div className="flex items-center gap-4 mb-10">
-                            <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+            <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex justify-center">
+                <div className="w-full max-w-3xl space-y-8 lg:space-y-10">
+                    <section className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[48px] p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div className="flex items-center gap-4 mb-8 lg:mb-10">
+                            <div className="size-10 lg:size-12 rounded-xl lg:rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                                 <span className="material-symbols-outlined">business</span>
                             </div>
-                            <h2 className="text-xl font-black text-slate-800 dark:text-white">Identidade do Negócio</h2>
+                            <h2 className="text-lg lg:text-xl font-black text-slate-800 dark:text-white">Identidade do Negócio</h2>
                         </div>
 
                         <form onSubmit={handleSave} className="space-y-8">
@@ -140,8 +140,8 @@ const Settings: React.FC = () => {
 
                                 <div className="md:col-span-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Logomarca da Empresa</label>
-                                    <div className="flex items-center gap-6">
-                                        <div className="relative size-32 rounded-[32px] bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden group">
+                                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                                        <div className="relative size-32 rounded-[28px] lg:rounded-[32px] bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden group">
                                             {formData.logo_url ? (
                                                 <img src={formData.logo_url} alt="Logo" className="w-full h-full object-contain p-4" />
                                             ) : (
@@ -153,8 +153,8 @@ const Settings: React.FC = () => {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="flex flex-col gap-3">
-                                            <label className="cursor-pointer bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all text-center">
+                                        <div className="flex flex-col gap-3 items-center sm:items-start text-center sm:text-left">
+                                            <label className="w-full sm:w-auto cursor-pointer bg-primary/10 hover:bg-primary/20 text-primary px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all text-center">
                                                 {uploading ? 'ENVIANDO...' : 'FAZER UPLOAD'}
                                                 <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={uploading} />
                                             </label>
@@ -176,14 +176,14 @@ const Settings: React.FC = () => {
                             </div>
 
                             <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-                                <button type="submit" disabled={saving} className="bg-primary hover:bg-primary/90 text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 transition-all active:scale-95 disabled:opacity-50">
+                                <button type="submit" disabled={saving} className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 transition-all active:scale-95 disabled:opacity-50">
                                     {saving ? 'SALVANDO...' : 'SALVAR ALTERAÇÕES'}
                                 </button>
                             </div>
                         </form>
                     </section>
 
-                    <section className="bg-white dark:bg-[#16212e] rounded-[48px] p-10 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden relative group">
+                    <section className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[48px] p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden relative group">
                         <div className="flex items-center gap-4 mb-4 text-amber-500">
                             <span className="material-symbols-outlined">security</span>
                             <h2 className="text-xl font-black">Planos e Faturamento</h2>

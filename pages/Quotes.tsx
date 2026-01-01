@@ -194,92 +194,94 @@ const Quotes: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark">
-            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-8 flex items-center justify-between">
+            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 lg:py-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-3 text-amber-500">
-                        <span className="material-symbols-outlined font-black text-3xl">request_quote</span>
-                        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Orçamentos</h1>
+                    <div className="flex items-center gap-2 lg:gap-3 text-amber-500">
+                        <span className="material-symbols-outlined font-black text-2xl lg:text-3xl">request_quote</span>
+                        <h1 className="text-xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Orçamentos</h1>
                     </div>
-                    <p className="text-sm text-slate-500 font-medium">Capture intenções de compra e gerencie propostas</p>
+                    <p className="text-xs lg:text-sm text-slate-500 font-medium">Capture intenções de compra e gerencie propostas</p>
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 lg:py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-amber-500/20 transition-all active:scale-95"
                 >
                     <span className="material-symbols-outlined font-black">add</span>
                     <span>NOVO ORÇAMENTO</span>
                 </button>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-8">
-                <div className="relative max-w-xl">
+            <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex flex-col gap-6 lg:gap-8">
+                <div className="relative w-full md:max-w-xl">
                     <span className="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
                     <input
                         type="text"
                         placeholder="Buscar por cliente ou descrição..."
-                        className="w-full pl-14 pr-6 py-4 bg-white dark:bg-[#16212e] border border-slate-200 dark:border-slate-800 rounded-[28px] text-sm font-bold shadow-sm focus:ring-4 focus:ring-amber-500/10 transition-all outline-none"
+                        className="w-full pl-14 pr-6 py-4 bg-white dark:bg-[#16212e] border border-slate-200 dark:border-slate-800 rounded-[24px] lg:rounded-[28px] text-sm font-bold shadow-sm focus:ring-4 focus:ring-amber-500/10 transition-all outline-none"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
                 </div>
 
-                <div className="bg-white dark:bg-[#16212e] rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-h-[400px]">
+                <div className="bg-white dark:bg-[#16212e] rounded-[28px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-h-[400px]">
                     {loading ? (
                         <div className="p-20 text-center text-slate-400 animate-pulse">Carregando propostas...</div>
                     ) : (
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                    <th className="px-8 py-5">Cliente</th>
-                                    <th className="px-8 py-5">Descrição</th>
-                                    <th className="px-8 py-5">Validade</th>
-                                    <th className="px-8 py-5">Valor Total</th>
-                                    <th className="px-8 py-5">Status</th>
-                                    <th className="px-8 py-5 text-right">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                {filteredQuotes.map(quote => (
-                                    <tr key={quote.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-                                        <td className="px-8 py-5">
-                                            <div className="flex items-center gap-3">
-                                                <div className="size-8 rounded-lg bg-amber-100 dark:bg-amber-900/20 text-amber-600 flex items-center justify-center font-black text-[10px]">
-                                                    {quote.clientName?.charAt(0)}
-                                                </div>
-                                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{quote.clientName}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-8 py-5 text-sm text-slate-500 font-medium">{quote.description}</td>
-                                        <td className="px-8 py-5 text-sm text-slate-500 font-bold">{quote.validUntil}</td>
-                                        <td className="px-8 py-5 text-sm font-black text-slate-900 dark:text-white">R$ {quote.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
-                                        <td className="px-8 py-5">
-                                            <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider ${quote.status === 'Rascunho' ? 'bg-slate-100 text-slate-500' :
-                                                quote.status === 'Aprovado' ? 'bg-emerald-100 text-emerald-600' :
-                                                    'bg-rose-100 text-rose-600'
-                                                }`}>
-                                                {quote.status}
-                                            </span>
-                                        </td>
-                                        <td className="px-8 py-5 text-right space-x-2">
-                                            <button onClick={() => handleShare(quote)} className="p-2 text-primary hover:bg-primary/5 rounded-xl transition-all" title="Enviar WhatsApp / PDF">
-                                                <span className="material-symbols-outlined text-xl">share</span>
-                                            </button>
-                                            {quote.status === 'Rascunho' && (
-                                                <button
-                                                    onClick={() => convertToOrder(quote)}
-                                                    disabled={converting === quote.id}
-                                                    className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
-                                                    title="Converter em Pedido"
-                                                >
-                                                    <span className="material-symbols-outlined text-xl">{converting === quote.id ? 'sync' : 'shopping_cart_checkout'}</span>
-                                                </button>
-                                            )}
-                                            <button className="p-2 text-slate-400 hover:bg-slate-100 rounded-xl transition-all"><span className="material-symbols-outlined text-xl">edit</span></button>
-                                        </td>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <th className="px-8 py-5">Cliente</th>
+                                        <th className="px-8 py-5">Descrição</th>
+                                        <th className="px-8 py-5">Validade</th>
+                                        <th className="px-8 py-5">Valor Total</th>
+                                        <th className="px-8 py-5">Status</th>
+                                        <th className="px-8 py-5 text-right">Ações</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                    {filteredQuotes.map(quote => (
+                                        <tr key={quote.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+                                            <td className="px-8 py-5">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="size-8 rounded-lg bg-amber-100 dark:bg-amber-900/20 text-amber-600 flex items-center justify-center font-black text-[10px]">
+                                                        {quote.clientName?.charAt(0)}
+                                                    </div>
+                                                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{quote.clientName}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-5 text-sm text-slate-500 font-medium">{quote.description}</td>
+                                            <td className="px-8 py-5 text-sm text-slate-500 font-bold">{quote.validUntil}</td>
+                                            <td className="px-8 py-5 text-sm font-black text-slate-900 dark:text-white">R$ {quote.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                                            <td className="px-8 py-5">
+                                                <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider ${quote.status === 'Rascunho' ? 'bg-slate-100 text-slate-500' :
+                                                    quote.status === 'Aprovado' ? 'bg-emerald-100 text-emerald-600' :
+                                                        'bg-rose-100 text-rose-600'
+                                                    }`}>
+                                                    {quote.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-8 py-5 text-right space-x-2">
+                                                <button onClick={() => handleShare(quote)} className="p-2 text-primary hover:bg-primary/5 rounded-xl transition-all" title="Enviar WhatsApp / PDF">
+                                                    <span className="material-symbols-outlined text-xl">share</span>
+                                                </button>
+                                                {quote.status === 'Rascunho' && (
+                                                    <button
+                                                        onClick={() => convertToOrder(quote)}
+                                                        disabled={converting === quote.id}
+                                                        className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                                                        title="Converter em Pedido"
+                                                    >
+                                                        <span className="material-symbols-outlined text-xl">{converting === quote.id ? 'sync' : 'shopping_cart_checkout'}</span>
+                                                    </button>
+                                                )}
+                                                <button className="p-2 text-slate-400 hover:bg-slate-100 rounded-xl transition-all"><span className="material-symbols-outlined text-xl">edit</span></button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
                 </div>
             </main>

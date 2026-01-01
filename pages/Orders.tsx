@@ -193,18 +193,18 @@ const Orders: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-background-light dark:bg-background-dark">
-      <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6">
+      <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 text-primary">
               <span className="material-symbols-outlined font-bold">shopping_bag</span>
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight text-shadow-sm">Gestão de Pedidos</h1>
+              <h1 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white tracking-tight text-shadow-sm">Gestão de Pedidos</h1>
             </div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Controle total de encomendas e produção</p>
+            <p className="text-slate-500 dark:text-slate-400 text-xs lg:text-sm font-medium">Controle total de encomendas e produção</p>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-lg shadow-primary/20 transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 lg:py-4 rounded-2xl font-black text-xs lg:text-sm shadow-lg shadow-primary/20 transition-all active:scale-95"
           >
             <span className="material-symbols-outlined font-black">add</span>
             <span>NOVO PEDIDO</span>
@@ -212,8 +212,8 @@ const Orders: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-[#16212e] p-4 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm">
+      <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex flex-col gap-6">
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-[#16212e] p-4 rounded-[28px] lg:rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="relative w-full md:max-w-md">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
             <input
@@ -226,7 +226,7 @@ const Orders: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#16212e] rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
+        <div className="bg-white dark:bg-[#16212e] rounded-[28px] lg:rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[400px]">
           {loading ? (
             <div className="p-20 flex flex-col items-center justify-center text-slate-400 gap-4">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
@@ -248,34 +248,34 @@ const Orders: React.FC = () => {
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {filteredOrders.map(order => (
                     <tr key={order.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-                      <td className="px-8 py-5">
+                      <td className="px-6 lg:px-8 py-4 lg:py-5">
                         <div className="flex flex-col">
-                          <span className="text-xs font-black text-slate-900 dark:text-white font-mono uppercase">#{order.id.slice(0, 6)}</span>
-                          <span className="text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
+                          <span className="text-[10px] lg:text-xs font-black text-slate-900 dark:text-white font-mono uppercase">#{order.id.slice(0, 6)}</span>
+                          <span className="text-[9px] lg:text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
                         </div>
                       </td>
-                      <td className="px-8 py-5">
+                      <td className="px-6 lg:px-8 py-4 lg:py-5">
                         <div className="flex items-center gap-3">
-                          <div className="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-black border border-primary/20">
+                          <div className="size-8 lg:size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] lg:text-xs font-black border border-primary/20">
                             {order.clientName.charAt(0)}
                           </div>
-                          <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{order.clientName}</span>
+                          <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-slate-200">{order.clientName}</span>
                         </div>
                       </td>
-                      <td className="px-8 py-5">
-                        <div className="flex flex-col overflow-hidden max-w-[300px]">
-                          <span className="text-sm font-black text-slate-800 dark:text-slate-100 truncate">{order.productName}</span>
+                      <td className="px-6 lg:px-8 py-4 lg:py-5">
+                        <div className="flex flex-col overflow-hidden max-w-[200px] lg:max-w-[300px]">
+                          <span className="text-xs lg:text-sm font-black text-slate-800 dark:text-slate-100 truncate">{order.productName}</span>
                           <div className="flex items-center gap-1.5 text-slate-400">
-                            <span className="material-symbols-outlined text-[14px]">event</span>
-                            <span className="text-[10px] font-bold">{order.deadline}</span>
+                            <span className="material-symbols-outlined text-[12px] lg:text-[14px]">event</span>
+                            <span className="text-[9px] lg:text-[10px] font-bold">{order.deadline}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="px-8 py-5 text-right">
-                        <span className="text-sm font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</span>
+                      <td className="px-6 lg:px-8 py-4 lg:py-5 text-right">
+                        <span className="text-xs lg:text-sm font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</span>
                       </td>
-                      <td className="px-8 py-5 text-center">
-                        <span className={`inline-flex px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                      <td className="px-6 lg:px-8 py-4 lg:py-5 text-center">
+                        <span className={`inline-flex px-2 lg:px-3 py-1 rounded-lg text-[8px] lg:text-[10px] font-black uppercase tracking-wider border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
                           order.status === OrderStatus.IN_PRODUCTION ? 'bg-blue-50 text-blue-600 border-blue-100' :
                             order.status === OrderStatus.PENDING ? 'bg-slate-50 text-slate-500 border-slate-100' :
                               'bg-amber-50 text-amber-600 border-amber-100'
@@ -283,22 +283,22 @@ const Orders: React.FC = () => {
                           {order.status}
                         </span>
                       </td>
-                      <td className="px-8 py-5 text-right">
-                        <div className="flex justify-end gap-2">
+                      <td className="px-6 lg:px-8 py-4 lg:py-5 text-right">
+                        <div className="flex justify-end gap-1 lg:gap-2">
                           <button
                             onClick={() => handleWhatsApp(order)}
-                            className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                            className="p-1.5 lg:p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
                             title="Enviar WhatsApp"
                           >
-                            <span className="material-symbols-outlined text-xl">chat</span>
+                            <span className="material-symbols-outlined text-lg lg:text-xl">chat</span>
                           </button>
                           <button
                             onClick={() => handleGeneratePDF(order)}
-                            className="p-2 text-primary hover:bg-blue-50 rounded-xl transition-all"
+                            className="p-1.5 lg:p-2 text-primary hover:bg-blue-50 rounded-xl transition-all"
                             title="Gerar PDF"
                             disabled={generatingPdf === order.id}
                           >
-                            <span className="material-symbols-outlined text-xl">
+                            <span className="material-symbols-outlined text-lg lg:text-xl">
                               {generatingPdf === order.id ? 'sync' : 'picture_as_pdf'}
                             </span>
                           </button>

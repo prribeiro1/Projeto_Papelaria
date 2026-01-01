@@ -25,19 +25,19 @@ const SubscriptionPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-background-light dark:bg-background-dark p-6 font-sans">
-            <div className={`bg-white dark:bg-[#16212e] p-12 rounded-[48px] w-full max-w-2xl shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden group text-center transition-all duration-500 ${showPlans ? 'scale-95 opacity-50 blur-sm pointer-events-none' : ''}`}>
+        <div className="min-h-screen w-full flex items-center justify-center bg-background-light dark:bg-background-dark p-4 lg:p-6 font-sans">
+            <div className={`bg-white dark:bg-[#16212e] p-8 lg:p-12 rounded-[32px] lg:rounded-[48px] w-full max-w-2xl shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden group text-center transition-all duration-500 ${showPlans ? 'scale-95 opacity-50 blur-sm pointer-events-none' : ''}`}>
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 size-64 bg-primary/5 rounded-full -mr-32 -mt-32 group-hover:scale-110 transition-transform"></div>
 
-                <div className="flex flex-col items-center mb-10 relative z-10">
-                    <div className="size-40 rounded-[40px] mb-8 bg-amber-50 dark:bg-amber-900/10 flex items-center justify-center text-amber-500 shadow-xl shadow-amber-500/10">
-                        <span className="material-symbols-outlined text-7xl font-black">lock</span>
+                <div className="flex flex-col items-center mb-8 lg:mb-10 relative z-10">
+                    <div className="size-32 lg:size-40 rounded-[32px] lg:rounded-[40px] mb-6 lg:mb-8 bg-amber-50 dark:bg-amber-900/10 flex items-center justify-center text-amber-500 shadow-xl shadow-amber-500/10">
+                        <span className="material-symbols-outlined text-6xl lg:text-7xl font-black">lock</span>
                     </div>
-                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-4 italic">
+                    <h1 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-3 lg:mb-4 italic">
                         Assinatura <span className="text-primary">Necessária</span>
                     </h1>
-                    <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-md mx-auto leading-relaxed">
+                    <p className="text-base lg:text-lg text-slate-500 dark:text-slate-400 font-medium max-w-md mx-auto leading-relaxed">
                         Sua conta no <span className="font-bold text-primary">PROATIVX</span> está ativa, mas você ainda não possui um plano de assinatura vinculado.
                     </p>
                 </div>
@@ -87,10 +87,10 @@ const SubscriptionPage: React.FC = () => {
 
             {/* Plans Modal */}
             {showPlans && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-6 animate-in fade-in zoom-in duration-300">
                     <div className="absolute inset-0 bg-background-dark/40 backdrop-blur-sm" onClick={() => setShowPlans(false)}></div>
-                    <div className="bg-white dark:bg-[#16212e] w-full max-w-4xl rounded-[48px] shadow-2xl relative z-10 overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row">
-                        <div className="p-12 flex-1">
+                    <div className="bg-white dark:bg-[#16212e] w-full max-w-4xl max-h-[90vh] lg:max-h-none rounded-[32px] lg:rounded-[48px] shadow-2xl relative z-10 overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row">
+                        <div className="p-8 lg:p-12 flex-1 overflow-y-auto lg:overflow-visible">
                             <button
                                 onClick={() => setShowPlans(false)}
                                 className="absolute top-8 left-8 size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-primary transition-colors"
@@ -121,7 +121,7 @@ const SubscriptionPage: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="bg-slate-50 dark:bg-slate-800/50 p-12 w-full md:w-96 flex flex-col gap-6">
+                        <div className="bg-slate-50 dark:bg-slate-800/50 p-8 lg:p-12 w-full md:w-96 flex flex-col gap-6 overflow-y-auto lg:overflow-visible">
                             {/* Monthly Plan */}
                             <a
                                 href={getStripeUrl('price_1Skn4hLY4Lc1mlrLLB0doYYq')}

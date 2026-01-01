@@ -49,50 +49,50 @@ const Despesas: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
-            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6 flex items-center justify-between">
+            <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 text-rose-500">
-                        <span className="material-symbols-outlined font-bold">trending_down</span>
-                        <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Despesas</h1>
+                    <div className="flex items-center gap-2 lg:gap-3 text-rose-500">
+                        <span className="material-symbols-outlined font-bold text-xl lg:text-2xl">trending_down</span>
+                        <h1 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white tracking-tight">Despesas</h1>
                     </div>
-                    <p className="text-sm text-slate-500 font-medium">Gestão de custos e gastos operacionais</p>
+                    <p className="text-xs lg:text-sm text-slate-500 font-medium">Gestão de custos e gastos operacionais</p>
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-lg shadow-rose-500/20 transition-all active:scale-95"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white px-6 py-3 lg:py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-rose-500/20 transition-all active:scale-95"
                 >
                     <span className="material-symbols-outlined font-black">add</span>
                     <span>REGISTRAR GASTO</span>
                 </button>
             </header>
 
-            <main className="flex-1 overflow-y-auto p-8 flex flex-col gap-8">
+            <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex flex-col gap-6 lg:gap-8">
                 {/* Summary Row */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="md:col-span-2 bg-rose-500/10 dark:bg-rose-900/10 p-8 rounded-[40px] border border-rose-100 dark:border-rose-900/20 flex flex-col justify-center">
+                    <div className="md:col-span-2 bg-rose-500/10 dark:bg-rose-900/10 p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-rose-100 dark:border-rose-900/20 flex flex-col justify-center">
                         <span className="text-[10px] font-black text-rose-600/70 uppercase tracking-widest mb-1">Total em Despesas (Mês)</span>
                         <div className="flex items-baseline gap-2">
                             <span className="text-sm font-black text-rose-600">R$</span>
-                            <span className="text-4xl font-black text-rose-600">{totalMonthly.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                            <span className="text-2xl lg:text-4xl font-black text-rose-600">{totalMonthly.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-[#16212e] p-8 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center overflow-hidden relative">
+                    <div className="bg-white dark:bg-[#16212e] p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center overflow-hidden relative">
                         <div className="absolute -right-4 -top-4 size-20 bg-primary/5 rounded-full"></div>
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Média Diária</span>
-                        <span className="text-xl font-black text-slate-800 dark:text-white">R$ {(totalMonthly / 30).toFixed(2)}</span>
+                        <span className="text-lg lg:text-xl font-black text-slate-800 dark:text-white">R$ {(totalMonthly / 30).toFixed(2)}</span>
                     </div>
-                    <div className="bg-white dark:bg-[#16212e] p-8 rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center overflow-hidden relative">
+                    <div className="bg-white dark:bg-[#16212e] p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center overflow-hidden relative">
                         <div className="absolute -right-4 -top-4 size-20 bg-amber-500/5 rounded-full"></div>
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Maior Categoria</span>
-                        <span className="text-xl font-black text-slate-800 dark:text-white">Insumos</span>
+                        <span className="text-lg lg:text-xl font-black text-slate-800 dark:text-white">Insumos</span>
                     </div>
                 </div>
 
                 {/* List */}
-                <div className="bg-white dark:bg-[#16212e] rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-h-[400px]">
-                    <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="bg-white dark:bg-[#16212e] rounded-[32px] lg:rounded-[40px] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-h-[400px]">
+                    <div className="p-6 lg:p-8 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <h3 className="text-lg font-black text-slate-800 dark:text-white">Histórico de Gastos</h3>
-                        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-fit">
                             <button className="px-4 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-[10px] font-black uppercase text-primary shadow-sm">Todos</button>
                             <button className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase text-slate-400">Este Mês</button>
                         </div>
