@@ -49,7 +49,7 @@ const Financeiro: React.FC = () => {
     paymentMethods[2].value = stats.paymentBreakdown?.cash || 0;
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 dark:bg-[#0f172a] overflow-hidden">
+        <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
             <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-8 py-6 flex items-center justify-between">
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2 text-primary">

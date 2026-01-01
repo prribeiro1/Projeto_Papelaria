@@ -32,101 +32,77 @@ export default function Auth() {
     };
 
     return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            fontFamily: "'Inter', sans-serif"
-        }}>
-            <div style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                padding: '3rem',
-                borderRadius: '20px',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-                width: '100%',
-                maxWidth: '400px',
-                backdropFilter: 'blur(10px)'
-            }}>
-                <h2 style={{ textAlign: 'center', color: '#333', marginBottom: '2rem' }}>
-                    {isLogin ? 'Login - Papelaria' : 'Criar Conta'}
-                </h2>
+        <div className="min-h-screen w-full flex items-center justify-center bg-background-light dark:bg-background-dark p-6 font-sans">
+            <div className="bg-white dark:bg-[#16212e] p-12 rounded-[48px] w-full max-w-md shadow-2xl border border-slate-100 dark:border-slate-800 relative overflow-hidden group">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 size-40 bg-primary/5 rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform"></div>
+                <div className="absolute bottom-0 left-0 size-32 bg-secondary/5 rounded-full -ml-16 -mb-16 group-hover:scale-110 transition-transform"></div>
 
-                <form onSubmit={handleAuth}>
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#555' }}>E-mail</label>
-                        <input
-                            type="email"
-                            placeholder="seu@email.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            style={{
-                                width: '100%',
-                                padding: '0.8rem',
-                                borderRadius: '8px',
-                                border: '1px solid #ddd',
-                                fontSize: '1rem'
-                            }}
-                        />
+                <div className="flex flex-col items-center mb-10 relative z-10">
+                    <div className="size-24 rounded-3xl mb-6 flex items-center justify-center overflow-hidden">
+                        <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain" />
                     </div>
-                    <div style={{ marginBottom: '2rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#555' }}>Senha</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            style={{
-                                width: '100%',
-                                padding: '0.8rem',
-                                borderRadius: '8px',
-                                border: '1px solid #ddd',
-                                fontSize: '1rem'
-                            }}
-                        />
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+                        {isLogin ? 'Bem-vindo de volta!' : 'Crie sua conta'}
+                    </h2>
+                    <p className="text-xs text-slate-400 font-black uppercase tracking-[0.2em]">
+                        {isLogin ? 'PROATIVX Business Suite' : 'Comece sua jornada hoje'}
+                    </p>
+                </div>
+
+                <form onSubmit={handleAuth} className="space-y-6 relative z-10">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 block">E-mail</label>
+                        <div className="relative">
+                            <span className="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-xl">mail</span>
+                            <input
+                                type="email"
+                                placeholder="seu@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="w-full h-14 pl-14 pr-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 block">Senha</label>
+                        <div className="relative">
+                            <span className="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-xl">lock</span>
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="w-full h-14 pl-14 pr-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                            />
+                        </div>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        style={{
-                            width: '100%',
-                            padding: '1rem',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: '#764ba2',
-                            color: 'white',
-                            fontSize: '1.1rem',
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                            transition: 'transform 0.2s',
-                            opacity: loading ? 0.7 : 1
-                        }}
+                        className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white text-sm font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all active:scale-95 disabled:opacity-50"
                     >
-                        {loading ? 'Processando...' : (isLogin ? 'Entrar' : 'Cadastrar')}
+                        {loading ? 'PROCESSANDO...' : (isLogin ? 'ENTRAR AGORA' : 'CRIAR MINHA CONTA')}
                     </button>
 
                     {message && (
-                        <p style={{
-                            marginTop: '1.5rem',
-                            textAlign: 'center',
-                            color: message.type === 'error' ? '#e53e3e' : '#38a169',
-                            fontSize: '0.9rem'
-                        }}>
+                        <div className={`p-4 rounded-xl text-center text-[10px] font-black uppercase tracking-widest ${message.type === 'error' ? 'bg-rose-50 text-rose-500 border border-rose-100' : 'bg-emerald-50 text-emerald-500 border border-emerald-100'
+                            }`}>
                             {message.text}
-                        </p>
+                        </div>
                     )}
 
-                    <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                    <div className="pt-6 text-center border-t border-slate-100 dark:border-slate-800">
                         <button
                             type="button"
                             onClick={() => setIsLogin(!isLogin)}
-                            style={{ background: 'none', border: 'none', color: '#764ba2', cursor: 'pointer', textDecoration: 'underline' }}
+                            className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-colors"
                         >
-                            {isLogin ? 'Ainda não tem conta? Cadastrar' : 'Já tem conta? Login'}
+                            {isLogin ? 'Ainda não tem conta? Clique aqui' : 'Já possui conta? Faça login'}
                         </button>
                     </div>
                 </form>

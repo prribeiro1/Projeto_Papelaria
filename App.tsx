@@ -65,11 +65,11 @@ const Sidebar = ({ session }: { session: Session | null }) => {
     <div className="hidden lg:flex flex-col w-72 bg-white dark:bg-[#111a27] border-r border-slate-200 dark:border-slate-800 h-full flex-none">
       <div className="p-8 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-4">
-          <div className="bg-primary rounded-2xl p-2 flex items-center justify-center size-10 text-white shadow-xl shadow-primary/20">
-            <span className="material-symbols-outlined font-black text-2xl">rocket_launch</span>
+          <div className="size-16 rounded-2xl flex items-center justify-center overflow-hidden">
+            <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <h1 className="text-primary text-xl font-black tracking-tight leading-none">PRO<span className="text-secondary">ATIVX</span></h1>
+            <h1 className="text-primary text-xl font-black tracking-tight leading-none italic">PRO<span className="text-secondary">ATIVX</span></h1>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-[#0f172a]">
+      <div className="h-screen w-full flex items-center justify-center bg-background-light dark:bg-background-dark">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
