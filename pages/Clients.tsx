@@ -61,10 +61,6 @@ const Clients: React.FC = () => {
             <p className="text-sm text-slate-500 font-medium">Gerencie o relacionamento e histórico de seus clientes</p>
           </div>
           <div className="flex items-center gap-4">
-            <button className="flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">
-              <span className="material-symbols-outlined text-[20px]">file_download</span>
-              <span>Exportar</span>
-            </button>
             <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
@@ -88,14 +84,6 @@ const Clients: React.FC = () => {
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Filtrar por Status:</span>
-            <div className="flex gap-1 bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl">
-              <button className="px-4 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-[10px] font-black uppercase text-emerald-500 shadow-sm transition-all text-xs">Todos</button>
-              <button className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase text-slate-500 hover:text-slate-700 transition-all text-xs">VIP</button>
-              <button className="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase text-slate-500 hover:text-slate-700 transition-all text-xs">Ativos</button>
-            </div>
           </div>
         </div>
 
