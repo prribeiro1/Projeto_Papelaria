@@ -1,4 +1,4 @@
-const CACHE_NAME = 'proativx-v1';
+const CACHE_NAME = 'proativx-v2';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
