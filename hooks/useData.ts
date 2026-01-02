@@ -233,13 +233,15 @@ export function useDashboardStats() {
         const { data: trans } = await supabase.from('transactions').select('value, type, payment_method');
         const { data: cls } = await supabase.from('clients').select('id');
 
-        const revenue = (ords || []).reduce((acc, o) => acc + Number(o.amount_paid || 0), 0);
-        const orderCosts = (ords || []).reduce((acc, o) => acc + Number(o.cost_value || 0), 0);
-        const expenses = (trans || []).filter(t => t.type === 'Saída').reduce((acc, t) => acc + Number(t.value), 0);
+        const validOrders = (ords || []).filter(o => o.status !== 'Cancelado');
+        const revenue = validOrders.reduce((acc, o) => acc + Number(o.amount_paid || 0), 0);
+        const orderCosts = validOrders.reduce((acc, o) => acc + Number(o.cost_value || 0), 0);
+        const expenses = (trans || []).filter(t => t.type === 'Saída').reduce((acc, t) => acc + Number(t.value || 0), 0);
 
-        const inProduction = (ords || []).filter(o => o.status !== 'Entregue' && o.status !== 'Cancelado').length;
-        const pending = (ords || []).filter(o => o.status !== 'Cancelado' && Number(o.amount_paid || 0) < Number(o.value)).length;
+        const inProduction = validOrders.filter(o => o.status !== 'Entregue').length;
+        const pending = validOrders.filter(o => Number(o.amount_paid || 0) < Number(o.value || 0)).length;
 
+        // Profit is based on ACTUAL money received minus ALL costs
         const profit = revenue - orderCosts - expenses;
 
         const pixTotal = (ords || []).filter(o => o.payment_method === 'Pix').reduce((acc, o) => acc + Number(o.value), 0);

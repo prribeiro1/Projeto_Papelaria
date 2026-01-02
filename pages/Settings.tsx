@@ -95,6 +95,37 @@ const Settings: React.FC = () => {
         setSaving(false);
     };
 
+    const handleResetData = async () => {
+        const confirm = window.confirm('ATENÇÃO: Isso apagará TODOS os seus pedidos, clientes, transações, orçamentos e produtos. Esta ação NÃO pode ser desfeita. Deseja continuar?');
+        if (!confirm) return;
+
+        const doubleConfirm = window.prompt('Para confirmar, digite "ZERAR" no campo abaixo:');
+        if (doubleConfirm !== 'ZERAR') {
+            alert('Confirmação inválida. Operação cancelada.');
+            return;
+        }
+
+        setSaving(true);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        try {
+            // Delete in order to respect potential relations
+            await supabase.from('orders').delete().eq('user_id', user.id);
+            await supabase.from('transactions').delete().eq('user_id', user.id);
+            await supabase.from('quotes').delete().eq('user_id', user.id);
+            // Check useProducts hook to see if it uses user_id or something else
+            await supabase.from('products').delete().eq('user_id', user.id);
+            await supabase.from('clients').delete().eq('user_id', user.id);
+
+            alert('Dados resetados com sucesso! A página será recarregada.');
+            window.location.reload();
+        } catch (error: any) {
+            alert('Erro ao resetar dados: ' + error.message);
+        }
+        setSaving(false);
+    };
+
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
             <header className="flex-shrink-0 bg-white dark:bg-[#16212e] border-b border-slate-200 dark:border-slate-800 px-6 lg:px-8 py-6 lg:py-8">
@@ -201,6 +232,27 @@ const Settings: React.FC = () => {
                             <h2 className="text-xl font-black">Planos e Faturamento</h2>
                         </div>
                         <p className="text-sm text-slate-500 font-medium leading-relaxed">Você está utilizando a versão <span className="text-primary font-bold">Enterprise</span> personalizada para Papelarias. Todos os recursos de BI e automação estão desbloqueados.</p>
+                    </section>
+
+                    <section className="bg-rose-50 dark:bg-rose-950/20 rounded-[32px] lg:rounded-[48px] p-8 lg:p-10 border border-rose-100 dark:border-rose-900/50 shadow-sm">
+                        <div className="flex items-center gap-4 mb-6 text-rose-600 dark:text-rose-400">
+                            <span className="material-symbols-outlined text-2xl lg:text-3xl font-black">dangerous</span>
+                            <h2 className="text-lg lg:text-xl font-black uppercase tracking-tight">Zona de Perigo</h2>
+                        </div>
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-rose-100 dark:border-rose-900/30">
+                            <div className="flex-1">
+                                <h3 className="text-sm font-black text-slate-900 dark:text-white mb-1">Limpar todos os dados</h3>
+                                <p className="text-xs text-slate-500 font-medium leading-relaxed">Apague permanentemente todos os seus pedidos, clientes e registros financeiros. Essa ação não poderá ser desfeita.</p>
+                            </div>
+                            <button
+                                onClick={handleResetData}
+                                disabled={saving}
+                                className="w-full md:w-auto flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+                            >
+                                <span className="material-symbols-outlined text-xl">delete_forever</span>
+                                <span>ZERAR TUDO</span>
+                            </button>
+                        </div>
                     </section>
                 </div>
             </main>
