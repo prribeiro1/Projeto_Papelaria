@@ -162,14 +162,12 @@ const SubscriptionPage: React.FC = () => {
                             {/* Manual Pix Section */}
                             <div className="mt-2 pt-6 border-t border-slate-200 dark:border-slate-700">
                                 <div className="p-5 rounded-2xl bg-white dark:bg-[#16212e] border border-emerald-500/30 flex flex-col gap-3">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <div className="size-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                            <span className="material-symbols-outlined text-lg">pix</span>
-                                        </div>
-                                        <div>
-                                            <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wide">Pagamento via Pix</h3>
-                                            <p className="text-[10px] text-slate-400 font-bold">Liberação Manual</p>
-                                        </div>
+                                    <div className="mb-1">
+                                        <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wide flex items-center gap-1">
+                                            Pagamento via
+                                            <span className="material-symbols-outlined text-emerald-500 text-xl">pix</span>
+                                        </h3>
+                                        <p className="text-[10px] text-slate-400 font-bold">Liberação Manual</p>
                                     </div>
 
                                     <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300">

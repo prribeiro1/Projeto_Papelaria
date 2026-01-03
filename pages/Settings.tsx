@@ -261,14 +261,10 @@ const Settings: React.FC = () => {
 };
 const ProfileSection: React.FC = () => {
     const [session, setSession] = useState<any>(null);
-    const { profile, refresh } = React.useMemo(() => {
-        // We use a dummy hook call or just inline the logic to avoid complex state management
-        // but for simplicity, let's just use the profile directly if we had a global context.
-        // Since we don't, we'll fetch it locally.
-        return { profile: null as any, refresh: () => { } };
-    }, []);
 
+    // We don't have a global profile context that updates automatically yet, so we fetch locally
     const [fullName, setFullName] = useState('');
+    const [gender, setGender] = useState('other');
     const [saving, setSaving] = useState(false);
     const [localProfile, setLocalProfile] = useState<any>(null);
 
@@ -280,6 +276,7 @@ const ProfileSection: React.FC = () => {
                     if (data) {
                         setLocalProfile(data);
                         setFullName(data.full_name || '');
+                        setGender(data.gender || 'other');
                     }
                 });
             }
@@ -293,38 +290,66 @@ const ProfileSection: React.FC = () => {
         setSaving(true);
         const { error } = await supabase
             .from('profiles')
-            .update({ full_name: fullName })
+            .update({
+                full_name: fullName,
+                gender: gender
+            })
             .eq('id', session.user.id);
 
         if (error) {
             alert('Erro ao atualizar perfil: ' + error.message);
         } else {
-            alert('Perfil atualizado com sucesso!');
+            alert('Perfil atualizado com sucesso! O nome do sistema será atualizado na próxima recarga.');
+            window.location.reload(); // Reload to update App name globally
         }
         setSaving(false);
     };
 
     return (
         <form onSubmit={handleSaveProfile} className="space-y-6">
-            <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Como deseja ser chamado?</label>
-                <div className="flex flex-col sm:flex-row gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Como deseja ser chamado?</label>
                     <input
                         required
                         placeholder="Ex: Seu Nome ou Apelido"
-                        className="flex-1 h-14 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-amber-500/10 transition-all outline-none"
+                        className="w-full h-14 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-amber-500/10 transition-all outline-none"
                         value={fullName}
                         onChange={e => setFullName(e.target.value)}
                     />
+                </div>
+
+                <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Gênero (Para personalizar o sistema)</label>
+                    <div className="relative">
+                        <select
+                            value={gender}
+                            onChange={e => setGender(e.target.value)}
+                            className="w-full h-14 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none text-sm font-bold focus:ring-4 focus:ring-amber-500/10 transition-all outline-none appearance-none cursor-pointer"
+                        >
+                            <option value="male">Masculino (PROATIVO)</option>
+                            <option value="female">Feminino (PROATIVA)</option>
+                            <option value="other">Neutro / Outro (PROATIVX)</option>
+                        </select>
+                        <span className="absolute right-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 pointer-events-none">expand_more</span>
+                    </div>
+                </div>
+
+                <div className="flex items-end">
                     <button
                         type="submit"
                         disabled={saving}
-                        className="h-14 px-8 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs lg:text-sm uppercase tracking-widest shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"
+                        className="w-full h-14 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs lg:text-sm uppercase tracking-widest shadow-lg shadow-amber-500/20 transition-all active:scale-95 disabled:opacity-50"
                     >
-                        {saving ? 'SALVANDO...' : 'ATUALIZAR NOME'}
+                        {saving ? 'SALVANDO...' : 'SALVAR PREFERÊNCIAS'}
                     </button>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-3 ml-1">Esse nome será exibido na tela inicial e nas notificações do sistema.</p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20">
+                <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                    <span className="font-black">Nota:</span> Ao selecionar "Masculino", o sistema se chamará <strong>PROATIVO</strong>. Ao selecionar "Feminino", se chamará <strong>PROATIVA</strong>.
+                </p>
             </div>
         </form>
     );

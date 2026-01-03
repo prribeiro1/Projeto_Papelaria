@@ -36,6 +36,8 @@ const Sidebar = ({ session, profile, isOpen, onClose }: { session: Session | nul
     await supabase.auth.signOut();
   };
 
+  const appNameSuffix = profile?.gender === 'male' ? 'O' : profile?.gender === 'female' ? 'A' : 'X';
+
   const menuSections = [
     {
       title: 'Principal',
@@ -79,7 +81,7 @@ const Sidebar = ({ session, profile, isOpen, onClose }: { session: Session | nul
               <img src="/logo.png" alt="PROATIVX Logo" className="w-full h-full object-contain scale-110" />
             </div>
             <div>
-              <h1 className="text-primary text-2xl font-black tracking-tighter leading-none italic">PRO<span className="text-secondary">ATIVX</span></h1>
+              <h1 className="text-primary text-2xl font-black tracking-tighter leading-none italic">PRO<span className="text-secondary">ATIV{appNameSuffix}</span></h1>
             </div>
           </div>
         </div>
@@ -143,22 +145,26 @@ const Sidebar = ({ session, profile, isOpen, onClose }: { session: Session | nul
   );
 };
 
-const MobileHeader = ({ onOpen, session }: { onOpen: () => void, session: Session | null }) => (
-  <div className="lg:hidden h-16 bg-white dark:bg-[#111a27] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-30">
-    <div className="flex items-center gap-3">
-      <div className="size-8 rounded-lg flex items-center justify-center overflow-hidden">
-        <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+const MobileHeader = ({ onOpen, session, profile }: { onOpen: () => void, session: Session | null, profile: any }) => {
+  const appNameSuffix = profile?.gender === 'male' ? 'O' : profile?.gender === 'female' ? 'A' : 'X';
+
+  return (
+    <div className="lg:hidden h-16 bg-white dark:bg-[#111a27] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-30">
+      <div className="flex items-center gap-3">
+        <div className="size-8 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+        </div>
+        <h1 className="text-primary text-lg font-black tracking-tighter italic">PRO<span className="text-secondary">ATIV{appNameSuffix}</span></h1>
       </div>
-      <h1 className="text-primary text-lg font-black tracking-tighter italic">PRO<span className="text-secondary">ATIVX</span></h1>
+      <button
+        onClick={onOpen}
+        className="size-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500"
+      >
+        <span className="material-symbols-outlined">menu</span>
+      </button>
     </div>
-    <button
-      onClick={onOpen}
-      className="size-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500"
-    >
-      <span className="material-symbols-outlined">menu</span>
-    </button>
-  </div>
-);
+  );
+}
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -192,7 +198,7 @@ const App: React.FC = () => {
       <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
         {session && <Sidebar session={session} profile={profile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
         <main className="flex-1 flex flex-col min-w-0">
-          {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} />}
+          {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} profile={profile} />}
           <div className="flex-1">
             <Routes>
               {/* ... same routes ... */}
