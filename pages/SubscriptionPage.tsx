@@ -158,6 +158,54 @@ const SubscriptionPage: React.FC = () => {
                             </a>
 
                             <p className="text-[9px] text-slate-400 font-medium text-center uppercase tracking-tighter">Cancelamento facilitado a qualquer momento</p>
+
+                            {/* Manual Pix Section */}
+                            <div className="mt-2 pt-6 border-t border-slate-200 dark:border-slate-700">
+                                <div className="p-5 rounded-2xl bg-white dark:bg-[#16212e] border border-emerald-500/30 flex flex-col gap-3">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="size-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                            <span className="material-symbols-outlined text-lg">pix</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wide">Pagamento via Pix</h3>
+                                            <p className="text-[10px] text-slate-400 font-bold">Liberação Manual</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                                        <p className="flex justify-between font-medium">
+                                            <span>Plano Mensal:</span>
+                                            <span className="font-bold text-slate-900 dark:text-white">R$ 14,90</span>
+                                        </p>
+                                        <p className="flex justify-between font-medium">
+                                            <span>Plano Anual:</span>
+                                            <span className="font-bold text-emerald-500">R$ 149,00</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 group/pix relative cursor-pointer"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText('prribeiro.contato@gmail.com');
+                                            // Optional: You could add a toast notification here
+                                        }}>
+                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 text-center">Chave Pix (E-mail)</p>
+                                        <p className="text-sm font-black text-center text-slate-800 dark:text-white select-all">prribeiro.contato@gmail.com</p>
+                                        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/10 dark:bg-white/10 opacity-0 group-hover/pix:opacity-100 transition-opacity rounded-xl backdrop-blur-[1px]">
+                                            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white bg-white/90 dark:bg-black/80 px-2 py-1 rounded-lg">Clique para copiar</span>
+                                        </div>
+                                    </div>
+
+                                    <a
+                                        href="https://wa.me/5522999298128?text=Ol%C3%A1!%20Fiz%20o%20pagamento%20via%20Pix%20do%20plano%20PROATIVX.%20Segue%20o%20comprovante."
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest transition-all text-center flex items-center justify-center gap-2"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">send</span>
+                                        Enviar Comprovante
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
