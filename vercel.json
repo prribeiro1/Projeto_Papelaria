@@ -1,5 +1,4 @@
 {
-    "baseDir": ".",
     "headers": [
         {
             "source": "/sw.js",
