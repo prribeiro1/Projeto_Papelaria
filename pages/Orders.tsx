@@ -28,7 +28,8 @@ const Orders: React.FC = () => {
     theme: '',
     notes: '',
     cost_value: 0,
-    payment_method: 'Dinheiro'
+    payment_method: 'Dinheiro',
+    id: '' // Used for editing
   });
 
   const location = useLocation();
@@ -147,7 +148,7 @@ const Orders: React.FC = () => {
 
     const productNameSummary = items.map(i => `${i.quantity}x ${i.description}`).join(', ');
 
-    const { error } = await supabase.from('orders').insert([{
+    const orderPayload = {
       client_id: finalClientId,
       product_name: productNameSummary || newOrder.product_name,
       value: total,
@@ -163,7 +164,24 @@ const Orders: React.FC = () => {
       production_status: newOrder.production_status,
       payment_method: newOrder.payment_method,
       items: items
-    }]);
+    };
+
+
+
+    let error;
+
+    if (newOrder.id) {
+      // Update existing
+      const { error: err } = await supabase.from('orders').update({
+        ...orderPayload,
+        user_id: undefined // Don't update user_id
+      }).eq('id', newOrder.id);
+      error = err;
+    } else {
+      // Create new
+      const { error: err } = await supabase.from('orders').insert([orderPayload]);
+      error = err;
+    }
 
     if (error) {
       alert('Erro ao criar pedido: ' + error.message);
@@ -180,7 +198,7 @@ const Orders: React.FC = () => {
       clientSelector: '', product_name: '', discount: 0, amount_paid: 0,
       status: OrderStatus.PENDING, production_status: 'Aguardando',
       deadline: '', event_date: '', theme: '', notes: '', cost_value: 0,
-      payment_method: 'Dinheiro'
+      payment_method: 'Dinheiro', id: ''
     });
     setItems([{ description: '', quantity: 1, unitValue: 0 }]);
   };
@@ -240,9 +258,11 @@ const Orders: React.FC = () => {
                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest"># ID / Data</th>
                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Cliente</th>
                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Produto / Prazo</th>
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Valor</th>
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
-                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Ações</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Valor Total</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendente</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Produção</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
+                    <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -271,8 +291,18 @@ const Orders: React.FC = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 lg:px-8 py-4 lg:py-5 text-right">
-                        <span className="text-xs lg:text-sm font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</span>
+                      <td className="px-6 lg:px-8 py-4 lg:py-5">
+                        <span className="text-xs lg:text-sm font-black text-emerald-600">R$ {order.value.toFixed(2)}</span>
+                      </td>
+                      <td className="px-6 lg:px-8 py-4 lg:py-5">
+                        <span className={`text-xs lg:text-sm font-black ${(order.value - (order.amountPaid || 0)) > 0.01 ? 'text-amber-500' : 'text-slate-300'}`}>
+                          R$ {Math.max(0, order.value - (order.amountPaid || 0)).toFixed(2)}
+                        </span>
+                      </td>
+                      <td className="px-6 lg:px-8 py-4 lg:py-5 text-center">
+                        <span className="inline-flex px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider bg-slate-100 text-slate-500 border border-slate-200">
+                          {order.productionStatus || 'Aguardando'}
+                        </span>
                       </td>
                       <td className="px-6 lg:px-8 py-4 lg:py-5 text-center">
                         <span className={`inline-flex px-2 lg:px-3 py-1 rounded-lg text-[8px] lg:text-[10px] font-black uppercase tracking-wider border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
@@ -285,6 +315,57 @@ const Orders: React.FC = () => {
                       </td>
                       <td className="px-6 lg:px-8 py-4 lg:py-5 text-right">
                         <div className="flex justify-end gap-1 lg:gap-2">
+                          <button
+                            onClick={() => {
+                              setNewOrder({
+                                clientSelector: order.clientName,
+                                product_name: order.productName,
+                                discount: order.discount,
+                                amount_paid: order.amountPaid,
+                                status: order.status as OrderStatus,
+                                production_status: order.productionStatus,
+                                deadline: order.deadline === 'Sem prazo' ? '' : order.deadline.split('/').reverse().join('-'), // Check date format
+                                event_date: order.eventDate ? order.eventDate.split('T')[0] : '', // Adjust logic if needed
+                                theme: order.theme,
+                                notes: order.notes,
+                                cost_value: order.costValue || 0,
+                                payment_method: order.paymentMethod,
+                                id: order.id
+                              });
+                              setItems(order.items && order.items.length ? order.items : [{ description: '', quantity: 1, unitValue: 0 }]); // Populate items if available
+                              setIsModalOpen(true);
+                            }}
+                            className="p-1.5 lg:p-2 text-amber-500 hover:bg-amber-50 rounded-xl transition-all"
+                            title="Pagamento / Editar"
+                          >
+                            <span className="material-symbols-outlined text-lg lg:text-xl">monetization_on</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              // Same logic as Payment but maybe distinct icon visually
+                              setNewOrder({
+                                clientSelector: order.clientName,
+                                product_name: order.productName,
+                                discount: order.discount,
+                                amount_paid: order.amountPaid,
+                                status: order.status as OrderStatus,
+                                production_status: order.productionStatus,
+                                deadline: order.deadline === 'Sem prazo' ? '' : order.deadline.split('/').reverse().join('-'),
+                                event_date: order.eventDate ? order.eventDate.split('T')[0] : '',
+                                theme: order.theme,
+                                notes: order.notes,
+                                cost_value: order.costValue || 0,
+                                payment_method: order.paymentMethod,
+                                id: order.id
+                              });
+                              setItems(order.items && order.items.length ? order.items : [{ description: '', quantity: 1, unitValue: 0 }]);
+                              setIsModalOpen(true);
+                            }}
+                            className="p-1.5 lg:p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
+                            title="Editar Pedido"
+                          >
+                            <span className="material-symbols-outlined text-lg lg:text-xl">edit</span>
+                          </button>
                           <button
                             onClick={() => handleWhatsApp(order)}
                             className="p-1.5 lg:p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
@@ -321,7 +402,9 @@ const Orders: React.FC = () => {
                 <button onClick={() => setIsModalOpen(false)} className="size-10 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 text-slate-400 hover:text-primary transition-all">
                   <span className="material-symbols-outlined">arrow_back</span>
                 </button>
-                <h3 className="text-2xl font-black text-slate-900 dark:text-white">Detalhes do Novo Pedido</h3>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white">
+                  {newOrder.id ? 'Editar Pedido' : 'Novo Pedido'}
+                </h3>
               </div>
             </div>
 

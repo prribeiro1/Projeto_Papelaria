@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useTransactions, useCompanySettings } from '../hooks/useData';
 import { supabase } from '../supabaseClient';
-import SalesGoal from '../components/SalesGoal';
 
 const Despesas: React.FC = () => {
     const { transactions, loading, refresh } = useTransactions();
@@ -69,9 +68,6 @@ const Despesas: React.FC = () => {
             </header>
 
             <main className="flex-1 overflow-y-auto p-6 lg:p-8 flex flex-col gap-6 lg:gap-8">
-                {/* Sales Goal */}
-                <SalesGoal initialGoal={settings?.monthly_goal} onUpdate={refreshSettings} />
-
                 {/* Summary Row */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="md:col-span-2 bg-rose-500/10 dark:bg-rose-900/10 p-6 lg:p-8 rounded-[32px] lg:rounded-[40px] border border-rose-100 dark:border-rose-900/20 flex flex-col justify-center">

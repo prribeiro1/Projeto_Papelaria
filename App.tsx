@@ -6,6 +6,7 @@ import Production from './pages/Production';
 import Clients from './pages/Clients';
 import Financeiro from './pages/Financeiro';
 import Despesas from './pages/Despesas';
+import Metas from './pages/Metas';
 import Auth from './pages/Auth';
 import Quotes from './pages/Quotes';
 import Settings from './pages/Settings';
@@ -53,6 +54,7 @@ const Sidebar = ({ session, profile, isOpen, onClose }: { session: Session | nul
       items: [
         { path: '/financeiro', label: 'Financeiro', icon: 'account_balance_wallet' },
         { path: '/despesas', label: 'Despesas', icon: 'trending_down' },
+        { path: '/metas', label: 'Metas', icon: 'flag' },
       ]
     },
     {
@@ -236,6 +238,11 @@ const App: React.FC = () => {
               <Route path="/despesas" element={session ? (
                 <SubscriptionGuard session={session}>
                   <Despesas />
+                </SubscriptionGuard>
+              ) : <Navigate to="/auth" />} />
+              <Route path="/metas" element={session ? (
+                <SubscriptionGuard session={session}>
+                  <Metas />
                 </SubscriptionGuard>
               ) : <Navigate to="/auth" />} />
               <Route path="/produtos" element={session ? (
