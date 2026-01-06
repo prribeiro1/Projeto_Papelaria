@@ -19,7 +19,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({ session, children
     }
 
     // Bypass for admin
-    if (session?.user?.email === 'admin@admin.com') {
+    if (session?.user?.email === 'admin@admin.com' || session?.user?.email === 'admin1@admin.com') {
         return <>{children}</>;
     }
 
