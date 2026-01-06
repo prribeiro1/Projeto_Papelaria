@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Quote } from '../types';
 import { QRCodeSVG } from 'qrcode.react';
+import { generatePixCopyPaste } from '../utils/pix';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -501,7 +502,18 @@ const Quotes: React.FC = () => {
                     </div>
                     {settings?.pixKey && (
                         <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'center' }}>
-                            <QRCodeSVG value={settings.pixKey} size={180} />
+                            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'center' }}>
+                                <QRCodeSVG
+                                    value={generatePixCopyPaste(
+                                        settings.pixKey,
+                                        settings.name || 'Loja',
+                                        'Cidade',
+                                        selectedQuote?.value?.toFixed(2) || '0.00',
+                                        selectedQuote?.id?.slice(0, 20)
+                                    )}
+                                    size={180}
+                                />
+                            </div>
                         </div>
                     )}
                 </div>

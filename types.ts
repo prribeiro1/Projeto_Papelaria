@@ -93,4 +93,5 @@ export interface CompanySettings {
   address?: string;
   pixKey?: string;
   quoteMessageTemplate?: string;
+  monthly_goal?: number;
 }

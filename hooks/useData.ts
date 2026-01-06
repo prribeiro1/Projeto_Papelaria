@@ -163,7 +163,8 @@ export function useCompanySettings() {
                 email: data.email,
                 address: data.address,
                 pixKey: data.pix_key,
-                quoteMessageTemplate: data.quote_message_template
+                quoteMessageTemplate: data.quote_message_template,
+                monthly_goal: data.monthly_goal,
             });
         }
         setLoading(false);
