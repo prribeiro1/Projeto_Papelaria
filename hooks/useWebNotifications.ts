@@ -19,15 +19,18 @@ export function useWebNotifications() {
     }, []);
 
     const sendNotification = useCallback(async (title: string, options?: NotificationOptions) => {
+        console.log('Tentando enviar notificacao:', title);
         if (Notification.permission === 'granted') {
             const registration = await navigator.serviceWorker.getRegistration();
             if (registration) {
+                console.log('Enviando via Service Worker');
                 registration.showNotification(title, {
                     icon: '/logo.png',
                     badge: '/logo.png',
                     ...options
                 });
             } else {
+                console.log('Enviando via Window Notification (SW nao encontrado)');
                 new Notification(title, {
                     icon: '/logo.png',
                     ...options
@@ -39,7 +42,11 @@ export function useWebNotifications() {
     }, []);
 
     const checkDeadlines = useCallback((orders: Order[]) => {
-        if (Notification.permission !== 'granted') return;
+        console.log('Verificando prazos para notificações. Total de pedidos:', orders.length);
+        if (Notification.permission !== 'granted') {
+            console.log('Notificações bloqueadas pelo navegador.');
+            return;
+        }
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -51,7 +58,6 @@ export function useWebNotifications() {
             if (order.status === OrderStatus.DELIVERED) return;
             if (!order.deadline || order.deadline === 'Sem prazo') return;
 
-            // Formato esperado: dd/mm/aaaa (vindo do hook useOrders reformulado)
             const parts = order.deadline.split('/');
             if (parts.length !== 3) return;
 
@@ -59,11 +65,14 @@ export function useWebNotifications() {
             const deadlineDate = new Date(year, month - 1, day);
             deadlineDate.setHours(0, 0, 0, 0);
 
-            // Chave para evitar duplicados na mesma sessao
             const storageKey = `notified-${order.id}-${deadlineDate.getTime()}`;
-            if (sessionStorage.getItem(storageKey)) return;
+            if (sessionStorage.getItem(storageKey)) {
+                console.log('Já notificado nesta sessão:', order.clientName);
+                return;
+            }
 
             if (deadlineDate.getTime() === today.getTime()) {
+                console.log('Prazo Hoje detectado para:', order.clientName);
                 sendNotification(`🚨 Prazo Hoje: ${order.clientName}`, {
                     body: `O pedido "${order.productName}" vence hoje!`,
                     tag: `deadline-${order.id}`,
@@ -71,6 +80,7 @@ export function useWebNotifications() {
                 });
                 sessionStorage.setItem(storageKey, 'true');
             } else if (deadlineDate.getTime() === tomorrow.getTime()) {
+                console.log('Prazo Amanhã detectado para:', order.clientName);
                 sendNotification(`⏳ Prazo Amanhã: ${order.clientName}`, {
                     body: `O pedido "${order.productName}" vence amanhã.`,
                     tag: `deadline-${order.id}`
