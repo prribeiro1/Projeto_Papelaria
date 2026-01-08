@@ -19,34 +19,37 @@ export function useWebNotifications() {
     }, []);
 
     const sendNotification = useCallback(async (title: string, options?: NotificationOptions) => {
-        console.log('Tentando enviar notificacao:', title);
+        console.log('Solicitando envio de notificação:', title);
+
         if (Notification.permission === 'granted') {
-            const registration = await navigator.serviceWorker.getRegistration();
-            if (registration) {
-                console.log('Enviando via Service Worker');
-                registration.showNotification(title, {
-                    icon: '/logo.png',
-                    badge: '/logo.png',
-                    ...options
-                });
-            } else {
-                console.log('Enviando via Window Notification (SW nao encontrado)');
+            try {
+                const registration = await navigator.serviceWorker.ready;
+                if (registration && registration.showNotification) {
+                    console.log('Enviando via Service Worker (Método Robusto)');
+                    await (registration as any).showNotification(title, {
+                        icon: '/logo.png',
+                        badge: '/logo.png',
+                        ...options
+                    });
+                } else {
+                    console.log('Enviando via Window Notification (Fallback)');
+                    new Notification(title, {
+                        icon: '/logo.png',
+                        ...options
+                    });
+                }
+            } catch (err) {
+                console.error('Erro ao enviar notificação via SW, tentando Window:', err);
                 new Notification(title, {
                     icon: '/logo.png',
                     ...options
                 });
             }
-        } else {
-            console.warn('Permissao de notificacao nao concedida:', Notification.permission);
         }
     }, []);
 
     const checkDeadlines = useCallback((orders: Order[]) => {
-        console.log('Verificando prazos para notificações. Total de pedidos:', orders.length);
-        if (Notification.permission !== 'granted') {
-            console.log('Notificações bloqueadas pelo navegador.');
-            return;
-        }
+        if (Notification.permission !== 'granted') return;
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -66,23 +69,18 @@ export function useWebNotifications() {
             deadlineDate.setHours(0, 0, 0, 0);
 
             const storageKey = `notified-${order.id}-${deadlineDate.getTime()}`;
-            if (sessionStorage.getItem(storageKey)) {
-                console.log('Já notificado nesta sessão:', order.clientName);
-                return;
-            }
+            const alreadyNotified = sessionStorage.getItem(storageKey);
 
-            if (deadlineDate.getTime() === today.getTime()) {
-                console.log('Prazo Hoje detectado para:', order.clientName);
-                sendNotification(`🚨 Prazo Hoje: ${order.clientName}`, {
-                    body: `O pedido "${order.productName}" vence hoje!`,
+            if (deadlineDate.getTime() === today.getTime() && !alreadyNotified) {
+                sendNotification(`PROATIVX: Prazo Hoje!`, {
+                    body: `${order.clientName} - ${order.productName}`,
                     tag: `deadline-${order.id}`,
                     requireInteraction: true
                 });
                 sessionStorage.setItem(storageKey, 'true');
-            } else if (deadlineDate.getTime() === tomorrow.getTime()) {
-                console.log('Prazo Amanhã detectado para:', order.clientName);
-                sendNotification(`⏳ Prazo Amanhã: ${order.clientName}`, {
-                    body: `O pedido "${order.productName}" vence amanhã.`,
+            } else if (deadlineDate.getTime() === tomorrow.getTime() && !alreadyNotified) {
+                sendNotification(`PROATIVX: Prazo Amanhã`, {
+                    body: `${order.clientName} - ${order.productName}`,
                     tag: `deadline-${order.id}`
                 });
                 sessionStorage.setItem(storageKey, 'true');
