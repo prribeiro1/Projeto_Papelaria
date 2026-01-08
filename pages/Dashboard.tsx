@@ -101,7 +101,10 @@ const Dashboard: React.FC = () => {
                       <div className="flex items-center gap-8">
                         <div className="hidden md:flex flex-col items-end">
                           <span className="text-xs font-black text-slate-900 dark:text-white">R$ {order.value.toFixed(2)}</span>
-                          <span className="text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
+                          <div className="flex items-center gap-1 text-slate-400">
+                            <span className="material-symbols-outlined text-[12px]">event</span>
+                            <span className="text-[10px] font-bold">{order.deadline}</span>
+                          </div>
                         </div>
                         <span className={`px - 3 py - 1 rounded - lg text - [9px] font - black uppercase tracking - [0.1em] border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
                           order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
