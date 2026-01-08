@@ -16,7 +16,21 @@ import SubscriptionPage from './pages/SubscriptionPage';
 import SubscriptionGuard from './components/SubscriptionGuard';
 import { supabase } from './supabaseClient';
 import { Session } from '@supabase/supabase-js';
-import { useProfile } from './hooks/useData';
+import { useProfile, useOrders } from './hooks/useData';
+import { useWebNotifications } from './hooks/useWebNotifications';
+
+const NotificationManager = ({ session }: { session: Session | null }) => {
+  const { orders } = useOrders();
+  const { checkDeadlines } = useWebNotifications();
+
+  useEffect(() => {
+    if (session && orders.length > 0) {
+      checkDeadlines(orders);
+    }
+  }, [session, orders, checkDeadlines]);
+
+  return null;
+};
 
 // Componentes Placeholder para novas páginas (para evitar arquivos vazios)
 const Placeholder = ({ title }: { title: string }) => (
@@ -199,6 +213,7 @@ const App: React.FC = () => {
     <HashRouter>
       <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
         {session && <Sidebar session={session} profile={profile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
+        {session && <NotificationManager session={session} />}
         <main className="flex-1 flex flex-col min-w-0">
           {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} profile={profile} />}
           <div className="flex-1">
