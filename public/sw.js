@@ -1,4 +1,4 @@
-const CACHE_NAME = 'proativx-v3';
+const CACHE_NAME = 'proativx-v4';
 const ASSETS_TO_CACHE = [
     '/manifest.json',
     '/icon-512.png',

@@ -63,7 +63,7 @@ export function useOrders() {
                 discount: Number(o.discount || 0),
                 paymentMethod: o.payment_method || 'Dinheiro',
                 productionStatus: o.production_status || 'Aguardando',
-                eventDate: o.event_date || '',
+                eventDate: o.event_date ? o.event_date.split('-').reverse().join('/') : '',
                 theme: o.theme || '',
                 notes: o.notes || ''
             }));
