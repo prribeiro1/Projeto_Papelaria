@@ -69,7 +69,7 @@ const Orders: React.FC = () => {
     doc.rect(0, 0, 210, 40, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(22);
-    doc.text(settings?.name || 'PAPELARIASYS', 20, 25);
+    doc.text(settings?.name || 'PROATIVX', 20, 25);
     doc.setFontSize(10);
     doc.text('RECIBO DE PEDIDO #' + order.id.slice(0, 8), 20, 32);
 
@@ -95,7 +95,7 @@ const Orders: React.FC = () => {
     // Footer
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text('Gerado automaticamente pelo PapelariaSys', 105, 280, { align: 'center' });
+    doc.text('Gerado automaticamente pelo PROATIVX', 105, 280, { align: 'center' });
 
     doc.save(`pedido_${order.id.slice(0, 8)}.pdf`);
     setGeneratingPdf(null);

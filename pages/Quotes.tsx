@@ -586,7 +586,7 @@ const Quotes: React.FC = () => {
                 </div>
 
                 <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                    <p style={{ fontSize: '12px', color: '#cbd5e1', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '4px' }}>Gerado por PapelariaSys</p>
+                    <p style={{ fontSize: '12px', color: '#cbd5e1', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '4px' }}>Gerado por PROATIVX</p>
                 </div>
             </div>
         </div >

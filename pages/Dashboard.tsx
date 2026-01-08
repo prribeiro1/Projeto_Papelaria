@@ -104,8 +104,8 @@ const Dashboard: React.FC = () => {
                           <span className="text-[10px] text-slate-400 font-bold">{order.createdAt}</span>
                         </div>
                         <span className={`px - 3 py - 1 rounded - lg text - [9px] font - black uppercase tracking - [0.1em] border ${order.status === OrderStatus.READY ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                            order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
-                              'bg-slate-50 text-slate-400 border-slate-100'
+                          order.status === OrderStatus.IN_PRODUCTION ? 'bg-primary/5 text-primary border-primary/20' :
+                            'bg-slate-50 text-slate-400 border-slate-100'
                           } `}>
                           {order.status}
                         </span>
@@ -149,7 +149,7 @@ const Dashboard: React.FC = () => {
 
             <div className="bg-slate-900 rounded-[32px] lg:rounded-[40px] p-6 lg:p-8 text-white relative overflow-hidden group">
               <div className="absolute top-0 right-0 size-40 bg-primary/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform"></div>
-              <h4 className="text-lg font-black mb-2 relative z-10">Dica do PapelariaSys</h4>
+              <h4 className="text-lg font-black mb-2 relative z-10">PROATIVX</h4>
               <p className="text-sm text-slate-400 font-medium relative z-10 leading-relaxed mb-6">Mantenha seus prazos atualizados na aba de Produção para receber alertas automáticos.</p>
               <Link to="/producao" className="bg-white/10 hover:bg-white/20 transition-all text-white text-[10px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl relative z-10 inline-block text-center">Acessar Produção</Link>
             </div>
