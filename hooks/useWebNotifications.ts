@@ -18,16 +18,29 @@ export function useWebNotifications() {
         return false;
     }, []);
 
-    const sendNotification = useCallback((title: string, options?: NotificationOptions) => {
+    const sendNotification = useCallback(async (title: string, options?: NotificationOptions) => {
         if (Notification.permission === 'granted') {
-            new Notification(title, {
-                icon: '/logo.png',
-                ...options
-            });
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (registration) {
+                registration.showNotification(title, {
+                    icon: '/logo.png',
+                    badge: '/logo.png',
+                    ...options
+                });
+            } else {
+                new Notification(title, {
+                    icon: '/logo.png',
+                    ...options
+                });
+            }
+        } else {
+            console.warn('Permissao de notificacao nao concedida:', Notification.permission);
         }
     }, []);
 
     const checkDeadlines = useCallback((orders: Order[]) => {
+        if (Notification.permission !== 'granted') return;
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -36,23 +49,33 @@ export function useWebNotifications() {
 
         orders.forEach(order => {
             if (order.status === OrderStatus.DELIVERED) return;
-            if (order.deadline === 'Sem prazo') return;
+            if (!order.deadline || order.deadline === 'Sem prazo') return;
 
-            // Converta a string 'dd/mm/aaaa' para objeto Date para comparacao precisa
-            const [day, month, year] = order.deadline.split('/').map(Number);
+            // Formato esperado: dd/mm/aaaa (vindo do hook useOrders reformulado)
+            const parts = order.deadline.split('/');
+            if (parts.length !== 3) return;
+
+            const [day, month, year] = parts.map(Number);
             const deadlineDate = new Date(year, month - 1, day);
             deadlineDate.setHours(0, 0, 0, 0);
+
+            // Chave para evitar duplicados na mesma sessao
+            const storageKey = `notified-${order.id}-${deadlineDate.getTime()}`;
+            if (sessionStorage.getItem(storageKey)) return;
 
             if (deadlineDate.getTime() === today.getTime()) {
                 sendNotification(`🚨 Prazo Hoje: ${order.clientName}`, {
                     body: `O pedido "${order.productName}" vence hoje!`,
-                    tag: `deadline-${order.id}`
+                    tag: `deadline-${order.id}`,
+                    requireInteraction: true
                 });
+                sessionStorage.setItem(storageKey, 'true');
             } else if (deadlineDate.getTime() === tomorrow.getTime()) {
                 sendNotification(`⏳ Prazo Amanhã: ${order.clientName}`, {
                     body: `O pedido "${order.productName}" vence amanhã.`,
                     tag: `deadline-${order.id}`
                 });
+                sessionStorage.setItem(storageKey, 'true');
             }
         });
     }, [sendNotification]);

@@ -167,7 +167,7 @@ const Quotes: React.FC = () => {
             description: quote.description,
             value: quote.value,
             valid_until: quote.validUntil ? quote.validUntil.split('/').reverse().join('-') : '', // Assuming dd/mm/yyyy from hook
-            event_date: quote.eventDate ? quote.eventDate.split('T')[0] : '',
+            event_date: quote.eventDate ? quote.eventDate.split('/').reverse().join('-') : '',
             theme: quote.theme || '',
             notes: quote.notes || '',
             items: quote.items && quote.items.length ? quote.items : [{ description: '', quantity: 1, unitValue: 0 }],

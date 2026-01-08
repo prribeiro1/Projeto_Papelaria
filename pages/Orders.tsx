@@ -325,7 +325,7 @@ const Orders: React.FC = () => {
                                 status: order.status as OrderStatus,
                                 production_status: order.productionStatus,
                                 deadline: order.deadline === 'Sem prazo' ? '' : order.deadline.split('/').reverse().join('-'), // Check date format
-                                event_date: order.eventDate ? order.eventDate.split('T')[0] : '', // Adjust logic if needed
+                                event_date: order.eventDate ? order.eventDate.split('/').reverse().join('-') : '',
                                 theme: order.theme,
                                 notes: order.notes,
                                 cost_value: order.costValue || 0,
@@ -351,7 +351,7 @@ const Orders: React.FC = () => {
                                 status: order.status as OrderStatus,
                                 production_status: order.productionStatus,
                                 deadline: order.deadline === 'Sem prazo' ? '' : order.deadline.split('/').reverse().join('-'),
-                                event_date: order.eventDate ? order.eventDate.split('T')[0] : '',
+                                event_date: order.eventDate ? order.eventDate.split('/').reverse().join('-') : '',
                                 theme: order.theme,
                                 notes: order.notes,
                                 cost_value: order.costValue || 0,

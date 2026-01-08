@@ -57,7 +57,7 @@ export function useOrders() {
                 costValue: Number(o.cost_value || 0),
                 status: o.status,
                 createdAt: new Date(o.created_at).toLocaleDateString('pt-BR'),
-                deadline: o.deadline ? new Date(o.deadline).toLocaleDateString('pt-BR') : 'Sem prazo',
+                deadline: o.deadline ? o.deadline.split('-').reverse().join('/') : 'Sem prazo',
                 items: o.items || [],
                 amountPaid: Number(o.amount_paid || 0),
                 discount: Number(o.discount || 0),
@@ -100,8 +100,8 @@ export function useQuotes() {
                 value: Number(q.value),
                 items: q.items || [],
                 status: q.status,
-                validUntil: q.valid_until ? new Date(q.valid_until).toLocaleDateString() : 'N/A',
-                eventDate: q.event_date ? new Date(q.event_date).toLocaleDateString() : '',
+                validUntil: q.valid_until ? q.valid_until.split('-').reverse().join('/') : 'N/A',
+                eventDate: q.event_date ? q.event_date.split('-').reverse().join('/') : '',
                 theme: q.theme || '',
                 notes: q.notes
             }));
