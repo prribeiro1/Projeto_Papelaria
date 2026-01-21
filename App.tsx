@@ -13,6 +13,7 @@ import Settings from './pages/Settings';
 import Products from './pages/Products';
 import Backup from './pages/Backup';
 import SubscriptionPage from './pages/SubscriptionPage';
+import LandingPage from './pages/LandingPage';
 import SubscriptionGuard from './components/SubscriptionGuard';
 import { supabase } from './supabaseClient';
 import { Session } from '@supabase/supabase-js';
@@ -57,7 +58,7 @@ const Sidebar = ({ session, profile, isOpen, onClose }: { session: Session | nul
     {
       title: 'Principal',
       items: [
-        { path: '/', label: 'Início', icon: 'dashboard' },
+        { path: '/dashboard', label: 'Início', icon: 'dashboard' },
         { path: '/pedidos', label: 'Pedidos', icon: 'shopping_bag' },
         { path: '/orcamentos', label: 'Orçamentos', icon: 'request_quote' },
         { path: '/producao', label: 'Produção', icon: 'layers' },
@@ -219,8 +220,9 @@ const App: React.FC = () => {
           <div className="flex-1">
             <Routes>
               {/* ... same routes ... */}
-              <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/" />} />
-              <Route path="/" element={session ? (
+              <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/dashboard" />} />
+              <Route path="/" element={!session ? <LandingPage /> : <Navigate to="/dashboard" />} />
+              <Route path="/dashboard" element={session ? (
                 <SubscriptionGuard session={session}>
                   <Dashboard />
                 </SubscriptionGuard>
