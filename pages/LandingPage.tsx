@@ -78,7 +78,7 @@ const LandingPage: React.FC = () => {
         },
         {
             question: 'Como funciona o pagamento?',
-            answer: 'Você pode pagar via cartão de crédito (renovação automática) ou Pix (liberação manual). Aceitamos todas as bandeiras.'
+            answer: 'O pagamento é processado pelo Asaas. Você pode pagar via cartão de crédito ou Pix, e a liberação do seu acesso é automática e instantânea assim que o pagamento é confirmado.'
         },
         {
             question: 'Posso cancelar a qualquer momento?',
@@ -298,7 +298,7 @@ const LandingPage: React.FC = () => {
                                     </li>
                                 ))}
                             </ul>
-                            <a href="https://buy.stripe.com/bJe5kE8a0enY6Ts3lzbwk04" target="_blank" rel="noopener noreferrer" className="block w-full py-4 bg-slate-100 hover:bg-primary hover:text-white text-slate-700 text-sm font-black uppercase tracking-wider rounded-2xl transition-all text-center">
+                            <a href="https://www.asaas.com/c/qwdhyu0qf9ywqz6f" target="_blank" rel="noopener noreferrer" className="block w-full py-4 bg-slate-100 hover:bg-primary hover:text-white text-slate-700 text-sm font-black uppercase tracking-wider rounded-2xl transition-all text-center">
                                 ASSINAR MENSAL
                             </a>
                         </div>
@@ -324,10 +324,18 @@ const LandingPage: React.FC = () => {
                                     </li>
                                 ))}
                             </ul>
-                            <a href="https://buy.stripe.com/aFaeVegGwa7Ib9I8FTbwk05" target="_blank" rel="noopener noreferrer" className="block w-full py-4 bg-primary hover:bg-primary/90 text-white text-sm font-black uppercase tracking-wider rounded-2xl shadow-lg shadow-primary/20 transition-all text-center">
+                            <a href="https://www.asaas.com/c/2kj3eomfr6p40qas" target="_blank" rel="noopener noreferrer" className="block w-full py-4 bg-primary hover:bg-primary/90 text-white text-sm font-black uppercase tracking-wider rounded-2xl shadow-lg shadow-primary/20 transition-all text-center">
                                 ASSINAR ANUAL
                             </a>
                         </div>
+                    </div>
+
+                    <div className="mt-12 max-w-2xl mx-auto p-6 bg-amber-50 rounded-[24px] border border-amber-200 flex items-center gap-4">
+                        <span className="material-symbols-outlined text-amber-500 text-3xl">info</span>
+                        <p className="text-sm text-amber-800 font-bold leading-relaxed text-left">
+                            <span className="block mb-1 text-xs uppercase tracking-widest text-amber-600">Liberação Instantânea</span>
+                            Para ativar sua conta na hora, certifique-se de usar o <span className="underline">mesmo e-mail</span> do seu cadastro no checkout do pagamento.
+                        </p>
                     </div>
 
                     {/* Removido: Prefere pagar via Pix? */}

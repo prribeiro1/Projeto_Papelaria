@@ -101,6 +101,13 @@ const SubscriptionPage: React.FC = () => {
                             <div className="mt-8 mb-10">
                                 <h1 className="text-3xl font-black text-slate-900 dark:text-white italic mb-2">Planos <span className="text-primary">PROATIVX</span></h1>
                                 <p className="text-sm text-slate-500 font-medium">Escolha a melhor opção para o seu negócio</p>
+
+                                <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 rounded-r-xl flex items-start gap-3">
+                                    <span className="material-symbols-outlined text-amber-500 mt-0.5">warning</span>
+                                    <p className="text-[11px] lg:text-xs text-amber-700 dark:text-amber-400 font-bold leading-relaxed">
+                                        IMPORTANTE: Use o <span className="underline">mesmo e-mail</span> do seu cadastro na hora do pagamento para que o sistema libere seu acesso instantaneamente.
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="space-y-4">
@@ -124,7 +131,7 @@ const SubscriptionPage: React.FC = () => {
                         <div className="bg-slate-50 dark:bg-slate-800/50 p-8 lg:p-12 w-full md:w-96 flex flex-col gap-6 overflow-y-auto lg:overflow-visible">
                             {/* Monthly Plan */}
                             <a
-                                href={getStripeUrl('price_1Skn4hLY4Lc1mlrLLB0doYYq')}
+                                href="https://www.asaas.com/c/qwdhyu0qf9ywqz6f"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-6 rounded-3xl bg-white dark:bg-[#16212e] border-2 border-transparent hover:border-primary transition-all group/plan cursor-pointer block"
@@ -141,7 +148,7 @@ const SubscriptionPage: React.FC = () => {
 
                             {/* Annual Plan */}
                             <a
-                                href={getStripeUrl('price_1Skn5BLY4Lc1mlrLSgjcVW2w')}
+                                href="https://www.asaas.com/c/2kj3eomfr6p40qas"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-6 rounded-3xl bg-white dark:bg-[#16212e] border-2 border-primary relative group/plan cursor-pointer shadow-xl shadow-primary/10 block"
@@ -157,53 +164,9 @@ const SubscriptionPage: React.FC = () => {
                                 </div>
                             </a>
 
-                            <p className="text-[9px] text-slate-400 font-medium text-center uppercase tracking-tighter">Cancelamento facilitado a qualquer momento</p>
+                            <p className="text-[9px] text-slate-400 font-medium text-center uppercase tracking-tighter">Conclusão automática após o pagamento</p>
 
-                            {/* Manual Pix Section */}
-                            <div className="mt-2 pt-6 border-t border-slate-200 dark:border-slate-700">
-                                <div className="p-5 rounded-2xl bg-white dark:bg-[#16212e] border border-emerald-500/30 flex flex-col gap-3">
-                                    <div className="mb-1">
-                                        <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wide flex items-center gap-1">
-                                            Pagamento via
-                                            <span className="material-symbols-outlined text-emerald-500 text-xl">pix</span>
-                                        </h3>
-                                        <p className="text-[10px] text-slate-400 font-bold">Liberação Manual</p>
-                                    </div>
-
-                                    <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
-                                        <p className="flex justify-between font-medium">
-                                            <span>Plano Mensal:</span>
-                                            <span className="font-bold text-slate-900 dark:text-white">R$ 14,90</span>
-                                        </p>
-                                        <p className="flex justify-between font-medium">
-                                            <span>Plano Anual:</span>
-                                            <span className="font-bold text-emerald-500">R$ 149,00</span>
-                                        </p>
-                                    </div>
-
-                                    <div className="bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 group/pix relative cursor-pointer"
-                                        onClick={() => {
-                                            navigator.clipboard.writeText('prribeiro.contato@gmail.com');
-                                            // Optional: You could add a toast notification here
-                                        }}>
-                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 text-center">Chave Pix (E-mail)</p>
-                                        <p className="text-sm font-black text-center text-slate-800 dark:text-white select-all">prribeiro.contato@gmail.com</p>
-                                        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/10 dark:bg-white/10 opacity-0 group-hover/pix:opacity-100 transition-opacity rounded-xl backdrop-blur-[1px]">
-                                            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white bg-white/90 dark:bg-black/80 px-2 py-1 rounded-lg">Clique para copiar</span>
-                                        </div>
-                                    </div>
-
-                                    <a
-                                        href="https://wa.me/5522999298128?text=Ol%C3%A1!%20Fiz%20o%20pagamento%20via%20Pix%20do%20plano%20PROATIVX.%20Segue%20o%20comprovante."
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest transition-all text-center flex items-center justify-center gap-2"
-                                    >
-                                        <span className="material-symbols-outlined text-sm">send</span>
-                                        Enviar Comprovante
-                                    </a>
-                                </div>
-                            </div>
+                            {/* Removido: Seção de Pix Manual */}
                         </div>
                     </div>
                 </div>

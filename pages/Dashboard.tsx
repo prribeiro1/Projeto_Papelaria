@@ -66,7 +66,10 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="flex items-baseline justify-between">
                 <span className={`text - 2xl font - black ${card.color} `}>{card.value}</span>
-                <span className={`text - [10px] font - black px - 2 py - 0.5 rounded - md ${card.trend.startsWith('+') ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'} `}>
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${card.trend.startsWith('+') || card.trend === 'OK' ? 'bg-emerald-50 text-emerald-500' :
+                    card.trend === 'Atenção' ? 'bg-rose-50 text-rose-500' :
+                      'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                  }`}>
                   {card.trend}
                 </span>
               </div>
