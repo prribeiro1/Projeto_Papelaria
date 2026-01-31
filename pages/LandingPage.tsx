@@ -245,7 +245,7 @@ const LandingPage: React.FC = () => {
                                 <img
                                     src="/lp.png"
                                     alt="PROATIVX Plataforma"
-                                    className="relative w-full h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px]"
+                                    className="relative w-full h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
                                 />
                             </div>
                         </div>
