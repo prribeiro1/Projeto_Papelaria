@@ -237,23 +237,16 @@ const LandingPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Hero Image/Mockup Slider */}
-                        <div className="relative lg:max-w-[480px] lg:ml-auto">
-                            <div className="relative bg-white rounded-[40px] shadow-2xl shadow-slate-900/10 border border-slate-200/50 overflow-hidden">
-                                <div className="bg-slate-100 px-6 py-4 flex items-center justify-between">
-                                    <div className="flex gap-2">
-                                        <div className="size-3 rounded-full bg-rose-400"></div>
-                                        <div className="size-3 rounded-full bg-amber-400"></div>
-                                        <div className="size-3 rounded-full bg-emerald-400"></div>
-                                    </div>
-                                    <span className="text-[10px] text-slate-400 font-black flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-[10px]">lock</span>
-                                        proativx.vercel.app
-                                    </span>
-                                </div>
-                                <div className="p-4 bg-slate-50 max-h-[500px] lg:max-h-[600px] overflow-hidden">
-                                    <MockupSlider images={mockups} />
-                                </div>
+                        {/* Hero Image - Static lp.png */}
+                        <div className="relative lg:max-w-[540px] lg:ml-auto">
+                            <div className="relative group">
+                                {/* Decorative elements behind image */}
+                                <div className="absolute -inset-4 bg-primary/5 rounded-[40px] blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+                                <img
+                                    src="/lp.png"
+                                    alt="PROATIVX Plataforma"
+                                    className="relative w-full h-auto drop-shadow-2xl rounded-3xl"
+                                />
                             </div>
                         </div>
                     </div>
