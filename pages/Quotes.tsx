@@ -287,57 +287,68 @@ const Quotes: React.FC = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                        <th className="px-8 py-5">Cliente</th>
-                                        <th className="px-8 py-5">Descrição</th>
-                                        <th className="px-8 py-5">Validade</th>
-                                        <th className="px-8 py-5">Valor Total</th>
-                                        <th className="px-8 py-5">Status</th>
-                                        <th className="px-8 py-5 text-right">Ações</th>
+                                    <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Cliente</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Descrição</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Validade</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Valor Total</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
+                                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                     {filteredQuotes.map(quote => (
                                         <tr key={quote.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
-                                            <td className="px-8 py-5">
+                                            <td className="px-6 lg:px-8 py-4 lg:py-5">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="size-8 rounded-lg bg-amber-100 dark:bg-amber-900/20 text-amber-600 flex items-center justify-center font-black text-[10px]">
+                                                    <div className="size-8 lg:size-9 rounded-full bg-amber-500/10 text-amber-600 flex items-center justify-center text-[10px] lg:text-xs font-black border border-amber-500/20">
                                                         {quote.clientName?.charAt(0)}
                                                     </div>
-                                                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{quote.clientName}</span>
+                                                    <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-slate-200">{quote.clientName}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-8 py-5 text-sm text-slate-500 font-medium">{quote.description}</td>
-                                            <td className="px-8 py-5 text-sm text-slate-500 font-bold">{quote.validUntil}</td>
-                                            <td className="px-8 py-5 text-sm font-black text-slate-900 dark:text-white">R$ {quote.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
-                                            <td className="px-8 py-5">
-                                                <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider ${quote.status === 'Rascunho' ? 'bg-slate-100 text-slate-500' :
-                                                    quote.status === 'Aprovado' ? 'bg-emerald-100 text-emerald-600' :
-                                                        'bg-rose-100 text-rose-600'
+                                            <td className="px-6 lg:px-8 py-4 lg:py-5">
+                                                <span className="text-xs lg:text-sm font-black text-slate-800 dark:text-slate-100 truncate block max-w-[200px]">{quote.description}</span>
+                                            </td>
+                                            <td className="px-6 lg:px-8 py-4 lg:py-5">
+                                                <div className="flex items-center gap-1.5 text-slate-400">
+                                                    <span className="material-symbols-outlined text-[12px] lg:text-[14px]">event</span>
+                                                    <span className="text-[9px] lg:text-[10px] font-bold">{quote.validUntil}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 lg:px-8 py-4 lg:py-5">
+                                                <span className="text-xs lg:text-sm font-black text-emerald-600">R$ {quote.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                            </td>
+                                            <td className="px-6 lg:px-8 py-4 lg:py-5 text-center">
+                                                <span className={`inline-flex px-2 lg:px-3 py-1 rounded-lg text-[8px] lg:text-[10px] font-black uppercase tracking-wider border ${quote.status === 'Rascunho' ? 'bg-slate-50 text-slate-500 border-slate-100' :
+                                                        quote.status === 'Aprovado' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                                                            'bg-rose-50 text-rose-600 border-rose-100'
                                                     }`}>
                                                     {quote.status}
                                                 </span>
                                             </td>
-                                            <td className="px-8 py-5 text-right space-x-2">
-                                                <button onClick={() => handleShare(quote)} className="p-2 text-primary hover:bg-primary/5 rounded-xl transition-all" title="Enviar WhatsApp / PDF">
-                                                    <span className="material-symbols-outlined text-xl">share</span>
-                                                </button>
-                                                {quote.status === 'Rascunho' && (
-                                                    <button
-                                                        onClick={() => convertToOrder(quote)}
-                                                        disabled={converting === quote.id}
-                                                        className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
-                                                        title="Converter em Pedido"
-                                                    >
-                                                        <span className="material-symbols-outlined text-xl">{converting === quote.id ? 'sync' : 'shopping_cart_checkout'}</span>
+                                            <td className="px-6 lg:px-8 py-4 lg:py-5 text-right">
+                                                <div className="flex justify-end gap-1 lg:gap-2">
+                                                    <button onClick={() => handleShare(quote)} className="p-1.5 lg:p-2 text-primary hover:bg-primary/5 rounded-xl transition-all" title="Enviar WhatsApp / PDF">
+                                                        <span className="material-symbols-outlined text-lg lg:text-xl">share</span>
                                                     </button>
-                                                )}
-                                                <button onClick={() => handleEdit(quote)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-xl transition-all" title="Editar">
-                                                    <span className="material-symbols-outlined text-xl">edit</span>
-                                                </button>
-                                                <button onClick={() => handleDelete(quote.id)} className="p-2 text-rose-400 hover:bg-rose-50 rounded-xl transition-all" title="Excluir">
-                                                    <span className="material-symbols-outlined text-xl">delete</span>
-                                                </button>
+                                                    {quote.status === 'Rascunho' && (
+                                                        <button
+                                                            onClick={() => convertToOrder(quote)}
+                                                            disabled={converting === quote.id}
+                                                            className="p-1.5 lg:p-2 text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                                                            title="Converter em Pedido"
+                                                        >
+                                                            <span className="material-symbols-outlined text-lg lg:text-xl">{converting === quote.id ? 'sync' : 'shopping_cart_checkout'}</span>
+                                                        </button>
+                                                    )}
+                                                    <button onClick={() => handleEdit(quote)} className="p-1.5 lg:p-2 text-slate-400 hover:bg-slate-100 rounded-xl transition-all" title="Editar">
+                                                        <span className="material-symbols-outlined text-lg lg:text-xl">edit</span>
+                                                    </button>
+                                                    <button onClick={() => handleDelete(quote.id)} className="p-1.5 lg:p-2 text-rose-400 hover:bg-rose-50 rounded-xl transition-all" title="Excluir">
+                                                        <span className="material-symbols-outlined text-lg lg:text-xl">delete</span>
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
