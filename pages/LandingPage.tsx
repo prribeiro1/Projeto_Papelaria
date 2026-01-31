@@ -173,9 +173,7 @@ const LandingPage: React.FC = () => {
                                 </button>
                             </div>
                             <div className="mt-8 flex items-center gap-6 justify-center lg:justify-start text-sm text-slate-500 font-medium">
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-emerald-500 text-lg">check_circle</span> Teste grátis</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-emerald-500 text-lg">check_circle</span> Sem cartão</span>
-                                <span className="flex items-center gap-1"><span className="material-symbols-outlined text-emerald-500 text-lg">check_circle</span> Cancele quando quiser</span>
+                                {/* Removido: Teste grátis, Sem cartão, Cancele quando quiser */}
                             </div>
                         </div>
 
@@ -197,32 +195,21 @@ const LandingPage: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* Floating Cards */}
-                            <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3 animate-bounce-slow">
-                                <div className="size-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center">
-                                    <span className="material-symbols-outlined">trending_up</span>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-400 font-bold">Lucro do Mês</p>
-                                    <p className="text-lg font-black text-emerald-500">+R$ 4.500</p>
-                                </div>
-                            </div>
-                            <div className="absolute -top-4 -right-4 bg-white p-3 rounded-xl shadow-xl border border-slate-100 flex items-center gap-2 animate-pulse">
-                                <span className="material-symbols-outlined text-amber-500">notifications_active</span>
-                                <span className="text-xs font-black text-slate-700">Prazo amanhã!</span>
-                            </div>
+                            {/* Removido: Cards flutuantes de Lucro e Prazo */}
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Logos/Social Proof */}
-            <section className="py-12 border-y border-slate-200/50 bg-white/50">
+            <section className="py-12 border-y border-secondary/10 bg-secondary/5">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <p className="text-center text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Para quem é o PROATIVX?</p>
-                    <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-12 text-slate-400">
+                    <p className="text-center text-xs font-black text-secondary uppercase tracking-[0.2em] mb-8">Para quem é o PROATIVX?</p>
+                    <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8">
                         {['Papelarias', 'Gráficas', 'Decoradores', 'Bordados', 'Estamparias', 'Personalizados'].map((item, i) => (
-                            <span key={i} className="text-sm lg:text-base font-bold px-4 py-2 bg-slate-100 rounded-full">{item}</span>
+                            <span key={i} className="text-sm lg:text-base font-black px-6 py-3 bg-white text-secondary border-2 border-secondary/20 rounded-2xl shadow-sm hover:border-secondary hover:shadow-md transition-all">
+                                {item}
+                            </span>
                         ))}
                     </div>
                 </div>
@@ -256,25 +243,24 @@ const LandingPage: React.FC = () => {
             </section>
 
             {/* Benefits Section */}
-            <section className="py-20 lg:py-32 px-6 lg:px-8 bg-gradient-to-br from-primary to-primary/90 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary/20 rounded-full blur-3xl"></div>
+            <section className="py-24 lg:py-32 px-6 lg:px-8 bg-primary relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="max-w-7xl mx-auto relative z-10">
-                    <div className="text-center mb-16">
-                        <span className="text-xs font-black text-white/60 uppercase tracking-widest">Por que o PROATIVX?</span>
-                        <h2 className="text-3xl lg:text-5xl font-black tracking-tight mt-4">
-                            O ponto <span className="italic">inicial</span> e <span className="italic">final</span><br />do seu processo.
+                    <div className="text-center mb-16 lg:mb-20">
+                        <span className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-[10px] font-black text-white uppercase tracking-[0.3em] mb-4">Por que o PROATIVX?</span>
+                        <h2 className="text-4xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                            O ponto <span className="text-[#F2E8CF] italic">inicial</span> e <span className="text-[#F2E8CF] italic">final</span><br />do seu processo.
                         </h2>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {benefits.map((benefit, i) => (
-                            <div key={i} className="flex items-center gap-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10">
-                                <div className="size-12 rounded-xl bg-white/20 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-xl">{benefit.icon}</span>
+                            <div key={i} className="group flex flex-col items-center text-center p-10 bg-white rounded-[40px] shadow-2xl shadow-slate-900/20 hover:-translate-y-2 transition-all duration-300">
+                                <div className="size-16 rounded-[24px] bg-secondary/10 text-secondary flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-secondary group-hover:text-white transition-all">
+                                    <span className="material-symbols-outlined text-3xl font-bold">{benefit.icon}</span>
                                 </div>
-                                <span className="text-base font-bold">{benefit.text}</span>
+                                <span className="text-xl font-black text-slate-900 leading-snug">{benefit.text}</span>
                             </div>
                         ))}
                     </div>
@@ -344,10 +330,7 @@ const LandingPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Pix Option */}
-                    <div className="mt-12 text-center">
-                        <p className="text-sm text-slate-500 font-medium mb-4">Prefere pagar via Pix? <a href="https://wa.me/5522999298128?text=Olá! Gostaria de pagar o PROATIVX via Pix." target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline">Fale conosco no WhatsApp</a></p>
-                    </div>
+                    {/* Removido: Prefere pagar via Pix? */}
                 </div>
             </section>
 
