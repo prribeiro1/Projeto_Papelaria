@@ -221,12 +221,13 @@ const MobileTabBar = () => {
   );
 };
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
   const { profile } = useProfile(session);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -248,76 +249,84 @@ const App: React.FC = () => {
     );
   }
 
+  const isLandingPage = location.pathname === '/' || location.pathname === '/home';
+
+  return (
+    <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
+      {session && !isLandingPage && <Sidebar session={session} profile={profile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
+      {session && <NotificationManager session={session} />}
+      <main className="flex-1 flex flex-col min-w-0 pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
+        {session && !isLandingPage && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} profile={profile} />}
+        <div className="flex-1">
+          {session && !isLandingPage && <MobileTabBar />}
+          <Routes>
+            <Route path="/home" element={<LandingPage />} />
+            <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/dashboard" />} />
+            <Route path="/" element={!session ? <LandingPage /> : <Navigate to="/dashboard" />} />
+            <Route path="/dashboard" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Dashboard />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/pedidos" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Orders />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/producao" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Production />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/clientes" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Clients />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/orcamentos" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Quotes />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/financeiro" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Financeiro />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/despesas" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Despesas />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/metas" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Metas />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/produtos" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Products />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/backup" element={session ? (
+              <SubscriptionGuard session={session}>
+                <Backup />
+              </SubscriptionGuard>
+            ) : <Navigate to="/auth" />} />
+            <Route path="/configuracao" element={session ? <Settings /> : <Navigate to="/auth" />} />
+            <Route path="/assinatura" element={session ? <SubscriptionPage /> : <Navigate to="/auth" />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+const App: React.FC = () => {
   return (
     <HashRouter>
-      <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
-        {session && <Sidebar session={session} profile={profile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
-        {session && <NotificationManager session={session} />}
-        <main className="flex-1 flex flex-col min-w-0 pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
-          {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} profile={profile} />}
-          <div className="flex-1">
-            {session && <MobileTabBar />}
-            <Routes>
-              {/* ... same routes ... */}
-              <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/dashboard" />} />
-              <Route path="/" element={!session ? <LandingPage /> : <Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Dashboard />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/pedidos" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Orders />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/producao" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Production />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/clientes" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Clients />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/orcamentos" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Quotes />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/financeiro" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Financeiro />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/despesas" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Despesas />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/metas" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Metas />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/produtos" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Products />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/backup" element={session ? (
-                <SubscriptionGuard session={session}>
-                  <Backup />
-                </SubscriptionGuard>
-              ) : <Navigate to="/auth" />} />
-              <Route path="/configuracao" element={session ? <Settings /> : <Navigate to="/auth" />} />
-              <Route path="/assinatura" element={session ? <SubscriptionPage /> : <Navigate to="/auth" />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </div>
-        </main>
-      </div>
+      <AppContent />
     </HashRouter>
   );
 };
