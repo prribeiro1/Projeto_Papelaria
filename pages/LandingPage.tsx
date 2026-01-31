@@ -237,15 +237,15 @@ const LandingPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Hero Image - Static lp.png */}
-                        <div className="relative lg:max-w-[540px] lg:ml-auto">
-                            <div className="relative group">
+                        {/* Hero Image - Static lp.png - Increased size */}
+                        <div className="relative w-full">
+                            <div className="relative group lg:scale-110 origin-center lg:origin-right">
                                 {/* Decorative elements behind image */}
-                                <div className="absolute -inset-4 bg-primary/5 rounded-[40px] blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+                                <div className="absolute -inset-10 bg-primary/5 rounded-[40px] blur-3xl group-hover:bg-primary/10 transition-colors"></div>
                                 <img
                                     src="/lp.png"
                                     alt="PROATIVX Plataforma"
-                                    className="relative w-full h-auto drop-shadow-2xl rounded-3xl"
+                                    className="relative w-full h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-[32px]"
                                 />
                             </div>
                         </div>
