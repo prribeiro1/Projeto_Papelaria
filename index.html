@@ -42,7 +42,7 @@
         }
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -75,6 +75,32 @@
             font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
         }
 
+        /* PWA specific safe area support */
+        :root {
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
+        }
+
+        body {
+            /* Prevent pull-to-refresh on mobile */
+            overscroll-behavior-y: none;
+            /* Disable system tap highlight */
+            -webkit-tap-highlight-color: transparent;
+            /* Improved scrolling for iOS */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Optimize touch targets for mobile */
+        @media (max-width: 1024px) {
+
+            button,
+            a {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;

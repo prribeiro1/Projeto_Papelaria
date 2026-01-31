@@ -39,39 +39,40 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-background-light dark:bg-background-dark overflow-hidden">
-      <header className="flex-shrink-0 px-6 lg:px-10 py-6 lg:py-10">
+      <header className="flex-shrink-0 px-6 lg:px-10 py-6 lg:py-10 pt-[calc(1.5rem+env(safe-area-inset-top))]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               {getTimeGreeting()}, <span className="text-primary">{userName}</span>! 👋
             </h1>
-            <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">
+            <p className="text-[10px] lg:text-sm text-slate-400 font-bold uppercase tracking-widest">
               {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
             </p>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-6 lg:px-10 pb-10 flex flex-col gap-8 lg:gap-10">
+      <main className="flex-1 overflow-y-auto px-6 lg:px-10 pb-[calc(2rem+env(safe-area-inset-bottom))] flex flex-col gap-8 lg:gap-10">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {dashboardCards.map((card, idx) => (
-            <div key={idx} className="group bg-white dark:bg-[#16212e] p-7 rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer relative overflow-hidden">
-              <div className={`absolute top - 0 right - 0 size - 24 ${card.bg} rounded - full - mr - 8 - mt - 8 group - hover: scale - 110 transition - transform`}></div>
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`size - 10 rounded - 2xl ${card.bg} ${card.color} flex items - center justify - center`}>
-                  <span className="material-symbols-outlined">{card.icon}</span>
+            <div key={idx} className="group bg-white dark:bg-[#16212e] p-5 lg:p-7 rounded-[24px] lg:rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-sm transition-all cursor-pointer relative overflow-hidden">
+              <div className="flex flex-col h-full justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className={`size-8 lg:size-10 rounded-xl lg:rounded-2xl ${card.bg} ${card.color} flex items-center justify-center`}>
+                    <span className="material-symbols-outlined text-lg lg:text-2xl">{card.icon}</span>
+                  </div>
+                  <span className="text-[8px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest">{card.label}</span>
                 </div>
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{card.label}</span>
-              </div>
-              <div className="flex items-baseline justify-between">
-                <span className={`text - 2xl font - black ${card.color} `}>{card.value}</span>
-                <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${card.trend.startsWith('+') || card.trend === 'OK' ? 'bg-emerald-50 text-emerald-500' :
-                    card.trend === 'Atenção' ? 'bg-rose-50 text-rose-500' :
-                      'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
-                  }`}>
-                  {card.trend}
-                </span>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className={`text-lg lg:text-2xl font-black ${card.color}`}>{card.value}</span>
+                  <span className={`text-[8px] lg:text-[10px] font-black px-2 py-0.5 rounded-md ${card.trend.startsWith('+') || card.trend === 'OK' ? 'bg-emerald-50 text-emerald-500' :
+                      card.trend === 'Atenção' ? 'bg-rose-50 text-rose-500' :
+                        'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                    }`}>
+                    {card.trend}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

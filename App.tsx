@@ -166,22 +166,60 @@ const MobileHeader = ({ onOpen, session, profile }: { onOpen: () => void, sessio
   const appNameSuffix = profile?.gender === 'male' ? 'O' : profile?.gender === 'female' ? 'A' : 'X';
 
   return (
-    <div className="lg:hidden h-16 bg-white dark:bg-[#111a27] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-30">
+    <div className="lg:hidden h-16 bg-white dark:bg-[#111a27] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-30 pt-[env(safe-area-inset-top)] h-[calc(4rem+env(safe-area-inset-top))]">
       <div className="flex items-center gap-3">
         <div className="size-8 rounded-lg flex items-center justify-center overflow-hidden">
           <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
         </div>
         <h1 className="text-primary text-lg font-black tracking-tighter italic">PRO<span className="text-secondary">ATIV{appNameSuffix}</span></h1>
       </div>
-      <button
-        onClick={onOpen}
-        className="size-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500"
-      >
-        <span className="material-symbols-outlined">menu</span>
-      </button>
+      <div className="flex items-center gap-2">
+        <Link to="/configuracao" className="size-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+          <span className="material-symbols-outlined text-xl">settings</span>
+        </Link>
+        <button
+          onClick={onOpen}
+          className="size-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500"
+        >
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+      </div>
     </div>
   );
 }
+
+const MobileTabBar = () => {
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
+
+  const tabs = [
+    { path: '/dashboard', label: 'Início', icon: 'home' },
+    { path: '/pedidos', label: 'Pedidos', icon: 'shopping_bag' },
+    { path: '/producao', label: 'Produção', icon: 'layers' },
+    { path: '/financeiro', label: 'Finanças', icon: 'account_balance_wallet' },
+  ];
+
+  return (
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-[#111a27]/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 z-40 pb-[env(safe-area-inset-bottom)]">
+      <div className="flex items-center justify-around h-16">
+        {tabs.map((tab) => (
+          <Link
+            key={tab.path}
+            to={tab.path}
+            className={`flex flex-col items-center justify-center gap-1 w-full h-full transition-all ${isActive(tab.path) ? 'text-primary' : 'text-slate-400'
+              }`}
+          >
+            <span className={`material-symbols-outlined text-[24px] ${isActive(tab.path) ? 'icon-filled' : ''}`}>
+              {tab.icon}
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-tighter">{tab.label}</span>
+            {isActive(tab.path) && <div className="absolute top-0 w-8 h-1 bg-primary rounded-b-full"></div>}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -215,9 +253,10 @@ const App: React.FC = () => {
       <div className="flex flex-col lg:flex-row min-h-screen w-full bg-background-light dark:bg-background-dark">
         {session && <Sidebar session={session} profile={profile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
         {session && <NotificationManager session={session} />}
-        <main className="flex-1 flex flex-col min-w-0">
+        <main className="flex-1 flex flex-col min-w-0 pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
           {session && <MobileHeader onOpen={() => setSidebarOpen(true)} session={session} profile={profile} />}
           <div className="flex-1">
+            {session && <MobileTabBar />}
             <Routes>
               {/* ... same routes ... */}
               <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/dashboard" />} />
