@@ -183,7 +183,7 @@ const LandingPage: React.FC = () => {
                             <button onClick={() => scrollToSection('funcionalidades')} className="text-sm font-bold text-slate-600 hover:text-primary transition-colors">Funcionalidades</button>
                             <button onClick={() => scrollToSection('precos')} className="text-sm font-bold text-slate-600 hover:text-primary transition-colors">Preços</button>
                             <button onClick={() => scrollToSection('faq')} className="text-sm font-bold text-slate-600 hover:text-primary transition-colors">FAQ</button>
-                            <a href="/#/auth" className="px-6 py-3 bg-primary hover:bg-primary/90 text-white text-sm font-black rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95">
+                            <a href="/#/auth" className="px-6 py-3 bg-primary hover:bg-primary/90 text-white text-sm font-black rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95 whitespace-nowrap">
                                 ENTRAR NO SISTEMA
                             </a>
                         </div>
@@ -227,14 +227,10 @@ const LandingPage: React.FC = () => {
                                 O <strong className="text-primary">PROATIVX</strong> é o sistema tudo-em-um para gerenciar pedidos, clientes, produção e finanças do seu negócio criativo.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <a href="/#/auth" className="px-8 py-4 bg-primary hover:bg-primary/90 text-white text-sm font-black uppercase tracking-wider rounded-2xl shadow-xl shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                                <a href="/#/auth" className="px-10 py-5 bg-primary hover:bg-primary/90 text-white text-sm font-black uppercase tracking-wider rounded-2xl shadow-xl shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-2">
                                     <span className="material-symbols-outlined">rocket_launch</span>
                                     COMEÇAR AGORA
                                 </a>
-                                <button onClick={() => scrollToSection('funcionalidades')} className="px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 text-sm font-black uppercase tracking-wider rounded-2xl shadow-lg border border-slate-200 transition-all flex items-center justify-center gap-2">
-                                    <span className="material-symbols-outlined">play_circle</span>
-                                    VER COMO FUNCIONA
-                                </button>
                             </div>
                             <div className="mt-8 flex items-center gap-6 justify-center lg:justify-start text-sm text-slate-500 font-medium">
                                 {/* Removido: Teste grátis, Sem cartão, Cancele quando quiser */}
@@ -242,10 +238,10 @@ const LandingPage: React.FC = () => {
                         </div>
 
                         {/* Hero Image/Mockup Slider */}
-                        <div className="relative">
-                            <div className="relative bg-white rounded-[32px] shadow-2xl shadow-slate-900/10 border border-slate-200/50 overflow-hidden">
-                                <div className="bg-slate-100 px-4 py-3 flex items-center justify-between">
-                                    <div className="flex gap-1.5">
+                        <div className="relative lg:max-w-[480px] lg:ml-auto">
+                            <div className="relative bg-white rounded-[40px] shadow-2xl shadow-slate-900/10 border border-slate-200/50 overflow-hidden">
+                                <div className="bg-slate-100 px-6 py-4 flex items-center justify-between">
+                                    <div className="flex gap-2">
                                         <div className="size-3 rounded-full bg-rose-400"></div>
                                         <div className="size-3 rounded-full bg-amber-400"></div>
                                         <div className="size-3 rounded-full bg-emerald-400"></div>
@@ -255,7 +251,7 @@ const LandingPage: React.FC = () => {
                                         proativx.vercel.app
                                     </span>
                                 </div>
-                                <div className="p-4 bg-slate-50 min-h-[300px] lg:min-h-[400px]">
+                                <div className="p-4 bg-slate-50 max-h-[500px] lg:max-h-[600px] overflow-hidden">
                                     <MockupSlider images={mockups} />
                                 </div>
                             </div>
