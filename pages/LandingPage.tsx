@@ -11,6 +11,70 @@ const LandingPage: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const MockupSlider = ({ images, showCount = 1, autoplaySpeed = 5000 }: { images: string[], showCount?: number, autoplaySpeed?: number }) => {
+        const [currentIndex, setCurrentIndex] = useState(0);
+
+        useEffect(() => {
+            const timer = setInterval(() => {
+                const maxIndex = images.length - (showCount);
+                setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+            }, autoplaySpeed);
+            return () => clearInterval(timer);
+        }, [images.length, showCount, autoplaySpeed]);
+
+        const next = () => {
+            const maxIndex = images.length - (showCount);
+            setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+        };
+        const prev = () => {
+            const maxIndex = images.length - (showCount);
+            setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+        };
+
+        return (
+            <div className="relative group w-full overflow-hidden">
+                <div
+                    className="flex transition-transform duration-1000 ease-in-out"
+                    style={{ transform: `translateX(-${currentIndex * (100 / showCount)}%)` }}
+                >
+                    {images.map((src, i) => (
+                        <div key={i} className="flex-none px-2" style={{ width: `${100 / showCount}%` }}>
+                            <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-200/50">
+                                <img src={src} alt={`Mockup ${i + 1}`} className="w-full h-auto object-cover" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <button
+                    type="button"
+                    onClick={prev}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 size-10 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-lg"
+                >
+                    <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button
+                    type="button"
+                    onClick={next}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 size-10 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-lg"
+                >
+                    <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+
+                <div className="flex justify-center gap-1.5 mt-4">
+                    {Array.from({ length: images.length - (showCount - 1) }).map((_, i) => (
+                        <div
+                            key={i}
+                            className={`size-1 sm:size-1.5 rounded-full transition-all ${currentIndex === i ? 'bg-primary w-4' : 'bg-slate-300'}`}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    const mockups = Array.from({ length: 9 }, (_, i) => `/${i + 1}.png`);
+
     const features = [
         {
             icon: 'shopping_bag',
@@ -177,40 +241,45 @@ const LandingPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Hero Image/Mockup */}
+                        {/* Hero Image/Mockup Slider */}
                         <div className="relative">
                             <div className="relative bg-white rounded-[32px] shadow-2xl shadow-slate-900/10 border border-slate-200/50 overflow-hidden">
-                                <div className="bg-slate-100 px-4 py-3 flex items-center gap-2">
+                                <div className="bg-slate-100 px-4 py-3 flex items-center justify-between">
                                     <div className="flex gap-1.5">
                                         <div className="size-3 rounded-full bg-rose-400"></div>
                                         <div className="size-3 rounded-full bg-amber-400"></div>
                                         <div className="size-3 rounded-full bg-emerald-400"></div>
                                     </div>
-                                    <span className="text-[10px] text-slate-400 font-bold ml-2">proativx.vercel.app</span>
+                                    <span className="text-[10px] text-slate-400 font-black flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[10px]">lock</span>
+                                        proativx.vercel.app
+                                    </span>
                                 </div>
-                                <div className="p-4 bg-gradient-to-br from-[#F2E8CF] to-[#E8DFC5] min-h-[300px] lg:min-h-[400px] flex items-center justify-center">
-                                    <div className="text-center">
-                                        <img src="/logo.png" alt="PROATIVX Dashboard" className="w-32 h-32 mx-auto mb-4 opacity-50" />
-                                        <p className="text-sm text-slate-500 font-bold">Preview do Dashboard</p>
-                                    </div>
+                                <div className="p-4 bg-slate-50 min-h-[300px] lg:min-h-[400px]">
+                                    <MockupSlider images={mockups} />
                                 </div>
                             </div>
-                            {/* Removido: Cards flutuantes de Lucro e Prazo */}
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Logos/Social Proof */}
-            <section className="py-12 border-y border-secondary/10 bg-secondary/5">
+            {/* Showcase Section - Dynamic Slider */}
+            <section className="py-20 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <p className="text-center text-xs font-black text-secondary uppercase tracking-[0.2em] mb-8">Para quem é o PROATIVX?</p>
-                    <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8">
-                        {['Papelarias', 'Gráficas', 'Decoradores', 'Bordados', 'Estamparias', 'Personalizados'].map((item, i) => (
-                            <span key={i} className="text-sm lg:text-base font-black px-6 py-3 bg-white text-secondary border-2 border-secondary/20 rounded-2xl shadow-sm hover:border-secondary hover:shadow-md transition-all">
-                                {item}
-                            </span>
-                        ))}
+                    <div className="text-center mb-12">
+                        <h2 className="text-2xl lg:text-3xl font-black tracking-tight text-slate-900">
+                            Conheça o sistema por <span className="text-primary italic">dentro</span>
+                        </h2>
+                    </div>
+
+                    {/* Desktop Slider (3 images) */}
+                    <div className="hidden lg:block">
+                        <MockupSlider images={mockups} showCount={3} autoplaySpeed={6000} />
+                    </div>
+                    {/* Mobile Slider (1 image) */}
+                    <div className="lg:hidden">
+                        <MockupSlider images={mockups} showCount={1} autoplaySpeed={4000} />
                     </div>
                 </div>
             </section>
